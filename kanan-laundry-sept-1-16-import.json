@@ -1,0 +1,808 @@
+{
+  "app": "kanan-laundry",
+  "exportedAt": "2026-09-19T00:00:00.000Z",
+  "transactions": [
+    {
+      "_id": "af00e7c0b916",
+      "type": "income",
+      "amount": 22000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-01",
+      "createdAt": 1789857190883
+    },
+    {
+      "_id": "ac0d1a7b11a",
+      "type": "income",
+      "amount": 40000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-02",
+      "createdAt": 1789857190884
+    },
+    {
+      "_id": "ca975fc7669",
+      "type": "income",
+      "amount": 18000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-03",
+      "createdAt": 1789857190885
+    },
+    {
+      "_id": "5883b4d7ee80",
+      "type": "income",
+      "amount": 38000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-04",
+      "createdAt": 1789857190886
+    },
+    {
+      "_id": "7905a41c9e79",
+      "type": "income",
+      "amount": 68000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-05",
+      "createdAt": 1789857190887
+    },
+    {
+      "_id": "1f204a3433b7",
+      "type": "income",
+      "amount": 16500,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-06",
+      "createdAt": 1789857190888
+    },
+    {
+      "_id": "359ae68cf9b2",
+      "type": "income",
+      "amount": 18000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-07",
+      "createdAt": 1789857190889
+    },
+    {
+      "_id": "8018b5e082c9",
+      "type": "income",
+      "amount": 24000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-08",
+      "createdAt": 1789857190890
+    },
+    {
+      "_id": "fd941224a1a1",
+      "type": "income",
+      "amount": 40000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-09",
+      "createdAt": 1789857190891
+    },
+    {
+      "_id": "bd6c4ecb7ccc",
+      "type": "income",
+      "amount": 29000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-10",
+      "createdAt": 1789857190892
+    },
+    {
+      "_id": "2bd5b50cd042",
+      "type": "income",
+      "amount": 72000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-11",
+      "createdAt": 1789857190893
+    },
+    {
+      "_id": "77e7d76af1b7",
+      "type": "income",
+      "amount": 30000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-12",
+      "createdAt": 1789857190894
+    },
+    {
+      "_id": "71801264abce",
+      "type": "income",
+      "amount": 23000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-13",
+      "createdAt": 1789857190895
+    },
+    {
+      "_id": "86992d67f4aa",
+      "type": "income",
+      "amount": 28000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-14",
+      "createdAt": 1789857190896
+    },
+    {
+      "_id": "f391cbc7f159",
+      "type": "income",
+      "amount": 18000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-15",
+      "createdAt": 1789857190897
+    },
+    {
+      "_id": "491283bcb411",
+      "type": "income",
+      "amount": 10000,
+      "description": "دخل",
+      "category": "income",
+      "date": "2026-09-16",
+      "createdAt": 1789857190898
+    },
+    {
+      "_id": "422145864a85",
+      "type": "expense",
+      "amount": 1000,
+      "description": "مصروف عام",
+      "category": "shop",
+      "date": "2026-09-01",
+      "createdAt": 1789857190899
+    },
+    {
+      "_id": "6d457ec88f8",
+      "type": "expense",
+      "amount": 1000,
+      "description": "صبغ",
+      "category": "shop",
+      "date": "2026-09-01",
+      "createdAt": 1789857190900
+    },
+    {
+      "_id": "40de0283c51d",
+      "type": "expense",
+      "amount": 2000,
+      "description": "حلويات",
+      "category": "personal",
+      "date": "2026-09-01",
+      "createdAt": 1789857190901
+    },
+    {
+      "_id": "aa30b5453749",
+      "type": "expense",
+      "amount": 1000,
+      "description": "فحم",
+      "category": "personal",
+      "date": "2026-09-01",
+      "createdAt": 1789857190902
+    },
+    {
+      "_id": "cc6b76973a51",
+      "type": "expense",
+      "amount": 1000,
+      "description": "تبرعات",
+      "category": "shop",
+      "date": "2026-09-01",
+      "createdAt": 1789857190903
+    },
+    {
+      "_id": "4c06a85b675a",
+      "type": "expense",
+      "amount": 150000,
+      "description": "اجار",
+      "category": "shop",
+      "date": "2026-09-01",
+      "createdAt": 1789857190904
+    },
+    {
+      "_id": "540d25807c62",
+      "type": "expense",
+      "amount": 11000,
+      "description": "فاتورة ماء",
+      "category": "shop",
+      "date": "2026-09-01",
+      "createdAt": 1789857190905
+    },
+    {
+      "_id": "2d196b86df7b",
+      "type": "expense",
+      "amount": 1500,
+      "description": "فطور",
+      "category": "personal",
+      "date": "2026-09-02",
+      "createdAt": 1789857190906
+    },
+    {
+      "_id": "a33bea9caf8d",
+      "type": "expense",
+      "amount": 15000,
+      "description": "غاز",
+      "category": "shop",
+      "date": "2026-09-02",
+      "createdAt": 1789857190907
+    },
+    {
+      "_id": "13b315897a29",
+      "type": "expense",
+      "amount": 1000,
+      "description": "ماء",
+      "category": "personal",
+      "date": "2026-09-02",
+      "createdAt": 1789857190908
+    },
+    {
+      "_id": "49405224a221",
+      "type": "expense",
+      "amount": 9000,
+      "description": "كراسي",
+      "category": "shop",
+      "date": "2026-09-03",
+      "createdAt": 1789857190909
+    },
+    {
+      "_id": "2734084f6fb8",
+      "type": "expense",
+      "amount": 8000,
+      "description": "مصروف عام",
+      "category": "personal",
+      "date": "2026-09-03",
+      "createdAt": 1789857190910
+    },
+    {
+      "_id": "62505cc8e1ec",
+      "type": "expense",
+      "amount": 2000,
+      "description": "مسبح",
+      "category": "personal",
+      "date": "2026-09-03",
+      "createdAt": 1789857190911
+    },
+    {
+      "_id": "71080962d618",
+      "type": "expense",
+      "amount": 18000,
+      "description": "تعاليك",
+      "category": "shop",
+      "date": "2026-09-04",
+      "createdAt": 1789857190912
+    },
+    {
+      "_id": "12f38165d639",
+      "type": "expense",
+      "amount": 22000,
+      "description": "رول نايلون دشداشة",
+      "category": "shop",
+      "date": "2026-09-04",
+      "createdAt": 1789857190913
+    },
+    {
+      "_id": "349ae3feb5ac",
+      "type": "expense",
+      "amount": 3000,
+      "description": "ماء",
+      "category": "personal",
+      "date": "2026-09-04",
+      "createdAt": 1789857190914
+    },
+    {
+      "_id": "55151abc0afa",
+      "type": "expense",
+      "amount": 10000,
+      "description": "غاز",
+      "category": "shop",
+      "date": "2026-09-05",
+      "createdAt": 1789857190915
+    },
+    {
+      "_id": "7342fbc63b90",
+      "type": "expense",
+      "amount": 2000,
+      "description": "حلويات",
+      "category": "personal",
+      "date": "2026-09-05",
+      "createdAt": 1789857190916
+    },
+    {
+      "_id": "b8a0bc126f3e",
+      "type": "expense",
+      "amount": 5000,
+      "description": "فحم + معسل",
+      "category": "personal",
+      "date": "2026-09-06",
+      "createdAt": 1789857190917
+    },
+    {
+      "_id": "87d6b210bc00",
+      "type": "expense",
+      "amount": 1500,
+      "description": "تبرعات",
+      "category": "shop",
+      "date": "2026-09-06",
+      "createdAt": 1789857190918
+    },
+    {
+      "_id": "ccca35798e07",
+      "type": "expense",
+      "amount": 4000,
+      "description": "فحم + معسل",
+      "category": "personal",
+      "date": "2026-09-06",
+      "createdAt": 1789857190919
+    },
+    {
+      "_id": "1e4e3e36325f",
+      "type": "expense",
+      "amount": 75000,
+      "description": "قسط السبلت",
+      "category": "personal",
+      "date": "2026-09-07",
+      "createdAt": 1789857190920
+    },
+    {
+      "_id": "86c6f78e4d14",
+      "type": "expense",
+      "amount": 25000,
+      "description": "بانزين",
+      "category": "personal",
+      "date": "2026-09-07",
+      "createdAt": 1789857190921
+    },
+    {
+      "_id": "f3b0f70767b2",
+      "type": "expense",
+      "amount": 1000,
+      "description": "تبرعات",
+      "category": "shop",
+      "date": "2026-09-07",
+      "createdAt": 1789857190922
+    },
+    {
+      "_id": "bfed0b359cfe",
+      "type": "expense",
+      "amount": 2000,
+      "description": "قهوة + ماء",
+      "category": "personal",
+      "date": "2026-09-07",
+      "createdAt": 1789857190923
+    },
+    {
+      "_id": "e4fe0390f5f4",
+      "type": "expense",
+      "amount": 5000,
+      "description": "عشاء",
+      "category": "personal",
+      "date": "2026-09-07",
+      "createdAt": 1789857190924
+    },
+    {
+      "_id": "5610dd927118",
+      "type": "expense",
+      "amount": 8000,
+      "description": "شراء رف خشب",
+      "category": "shop",
+      "date": "2026-09-08",
+      "createdAt": 1789857190925
+    },
+    {
+      "_id": "b30d28e41df8",
+      "type": "expense",
+      "amount": 1000,
+      "description": "قهوة",
+      "category": "personal",
+      "date": "2026-09-08",
+      "createdAt": 1789857190926
+    },
+    {
+      "_id": "f10c887e61a9",
+      "type": "expense",
+      "amount": 1000,
+      "description": "شراء ختم",
+      "category": "shop",
+      "date": "2026-09-08",
+      "createdAt": 1789857190927
+    },
+    {
+      "_id": "6c86ff62d7b1",
+      "type": "expense",
+      "amount": 3000,
+      "description": "شراء معطر ملابس",
+      "category": "shop",
+      "date": "2026-09-08",
+      "createdAt": 1789857190928
+    },
+    {
+      "_id": "e254564111e0",
+      "type": "expense",
+      "amount": 25000,
+      "description": "شراء اثاث",
+      "category": "shop",
+      "date": "2026-09-08",
+      "createdAt": 1789857190929
+    },
+    {
+      "_id": "b3797cbc2fc",
+      "type": "expense",
+      "amount": 1000,
+      "description": "تبرعات",
+      "category": "shop",
+      "date": "2026-09-08",
+      "createdAt": 1789857190930
+    },
+    {
+      "_id": "572fd8218900",
+      "type": "expense",
+      "amount": 2000,
+      "description": "فحم",
+      "category": "personal",
+      "date": "2026-09-08",
+      "createdAt": 1789857190931
+    },
+    {
+      "_id": "1ccfc99b9668",
+      "type": "expense",
+      "amount": 10000,
+      "description": "غاز",
+      "category": "shop",
+      "date": "2026-09-09",
+      "createdAt": 1789857190932
+    },
+    {
+      "_id": "21864a6e827c",
+      "type": "expense",
+      "amount": 1000,
+      "description": "تبرع",
+      "category": "shop",
+      "date": "2026-09-09",
+      "createdAt": 1789857190933
+    },
+    {
+      "_id": "93348f4ddec8",
+      "type": "expense",
+      "amount": 1000,
+      "description": "افطار",
+      "category": "personal",
+      "date": "2026-09-09",
+      "createdAt": 1789857190934
+    },
+    {
+      "_id": "ed5a21ef79d3",
+      "type": "expense",
+      "amount": 5000,
+      "description": "شاحنة",
+      "category": "personal",
+      "date": "2026-09-09",
+      "createdAt": 1789857190935
+    },
+    {
+      "_id": "611d39ecb5d4",
+      "type": "expense",
+      "amount": 17000,
+      "description": "شراء عسل",
+      "category": "personal",
+      "date": "2026-09-09",
+      "createdAt": 1789857190936
+    },
+    {
+      "_id": "9d8b376cebe7",
+      "type": "expense",
+      "amount": 5000,
+      "description": "فطور + قهوة + ماء",
+      "category": "personal",
+      "date": "2026-09-10",
+      "createdAt": 1789857190937
+    },
+    {
+      "_id": "a78b371f2407",
+      "type": "expense",
+      "amount": 6500,
+      "description": "شراء اغراض",
+      "category": "shop",
+      "date": "2026-09-10",
+      "createdAt": 1789857190938
+    },
+    {
+      "_id": "4f9ebd87ad0e",
+      "type": "expense",
+      "amount": 1000,
+      "description": "شراء مسبحة",
+      "category": "personal",
+      "date": "2026-09-10",
+      "createdAt": 1789857190939
+    },
+    {
+      "_id": "a8d3ef68c84",
+      "type": "expense",
+      "amount": 3000,
+      "description": "افطار",
+      "category": "personal",
+      "date": "2026-09-11",
+      "createdAt": 1789857190940
+    },
+    {
+      "_id": "ed529f2afa0a",
+      "type": "expense",
+      "amount": 10000,
+      "description": "غاز",
+      "category": "shop",
+      "date": "2026-09-11",
+      "createdAt": 1789857190941
+    },
+    {
+      "_id": "703df8eaeb6f",
+      "type": "expense",
+      "amount": 10000,
+      "description": "فحم + معسل",
+      "category": "personal",
+      "date": "2026-09-11",
+      "createdAt": 1789857190942
+    },
+    {
+      "_id": "26d8f3a68498",
+      "type": "expense",
+      "amount": 1000,
+      "description": "مصروف عام",
+      "category": "personal",
+      "date": "2026-09-11",
+      "createdAt": 1789857190943
+    },
+    {
+      "_id": "cb7978325a81",
+      "type": "expense",
+      "amount": 1500,
+      "description": "تبرع",
+      "category": "shop",
+      "date": "2026-09-11",
+      "createdAt": 1789857190944
+    },
+    {
+      "_id": "a6e31fa4c826",
+      "type": "expense",
+      "amount": 18000,
+      "description": "تعاليك",
+      "category": "shop",
+      "date": "2026-09-12",
+      "createdAt": 1789857190945
+    },
+    {
+      "_id": "f06024d6897f",
+      "type": "expense",
+      "amount": 22000,
+      "description": "رول نايلون",
+      "category": "shop",
+      "date": "2026-09-12",
+      "createdAt": 1789857190946
+    },
+    {
+      "_id": "f4c76a1000a7",
+      "type": "expense",
+      "amount": 5000,
+      "description": "دين لزكريا",
+      "category": "shop",
+      "date": "2026-09-12",
+      "createdAt": 1789857190947
+    },
+    {
+      "_id": "197fc212c1ae",
+      "type": "expense",
+      "amount": 2000,
+      "description": "فطور + قهوة",
+      "category": "personal",
+      "date": "2026-09-12",
+      "createdAt": 1789857190948
+    },
+    {
+      "_id": "399660127b31",
+      "type": "expense",
+      "amount": 20000,
+      "description": "بانزين",
+      "category": "personal",
+      "date": "2026-09-12",
+      "createdAt": 1789857190949
+    },
+    {
+      "_id": "afb72e68d36c",
+      "type": "expense",
+      "amount": 10000,
+      "description": "تسوق",
+      "category": "personal",
+      "date": "2026-09-12",
+      "createdAt": 1789857190950
+    },
+    {
+      "_id": "23e01c5aa6ae",
+      "type": "expense",
+      "amount": 5000,
+      "description": "مصروف عام",
+      "category": "personal",
+      "date": "2026-09-12",
+      "createdAt": 1789857190951
+    },
+    {
+      "_id": "45f75f4587db",
+      "type": "expense",
+      "amount": 1500,
+      "description": "عشاء لزكريا",
+      "category": "shop",
+      "date": "2026-09-12",
+      "createdAt": 1789857190952
+    },
+    {
+      "_id": "b98409ba79e4",
+      "type": "expense",
+      "amount": 1000,
+      "description": "قهوة",
+      "category": "personal",
+      "date": "2026-09-13",
+      "createdAt": 1789857190953
+    },
+    {
+      "_id": "e2bf3dab366b",
+      "type": "expense",
+      "amount": 5000,
+      "description": "استمارة",
+      "category": "personal",
+      "date": "2026-09-13",
+      "createdAt": 1789857190954
+    },
+    {
+      "_id": "56a76bea04d3",
+      "type": "expense",
+      "amount": 3000,
+      "description": "غداء",
+      "category": "personal",
+      "date": "2026-09-13",
+      "createdAt": 1789857190955
+    },
+    {
+      "_id": "26e6f04a508f",
+      "type": "expense",
+      "amount": 1000,
+      "description": "ماء",
+      "category": "personal",
+      "date": "2026-09-13",
+      "createdAt": 1789857190956
+    },
+    {
+      "_id": "c6d1a5678ab7",
+      "type": "expense",
+      "amount": 25000,
+      "description": "اشتراك مولد",
+      "category": "shop",
+      "date": "2026-09-13",
+      "createdAt": 1789857190957
+    },
+    {
+      "_id": "29f5472768d1",
+      "type": "expense",
+      "amount": 15000,
+      "description": "شحن رصيد للماستر",
+      "category": "personal",
+      "date": "2026-09-14",
+      "createdAt": 1789857190958
+    },
+    {
+      "_id": "5c974aaad045",
+      "type": "expense",
+      "amount": 2000,
+      "description": "فطور",
+      "category": "personal",
+      "date": "2026-09-14",
+      "createdAt": 1789857190959
+    },
+    {
+      "_id": "f8fd9bab7253",
+      "type": "expense",
+      "amount": 1000,
+      "description": "مصروف عام",
+      "category": "personal",
+      "date": "2026-09-14",
+      "createdAt": 1789857190960
+    },
+    {
+      "_id": "7d92bcd0060d",
+      "type": "expense",
+      "amount": 3500,
+      "description": "توصيلات صوندات",
+      "category": "shop",
+      "date": "2026-09-15",
+      "createdAt": 1789857190961
+    },
+    {
+      "_id": "1d7067345679",
+      "type": "expense",
+      "amount": 4500,
+      "description": "صوندات",
+      "category": "shop",
+      "date": "2026-09-15",
+      "createdAt": 1789857190962
+    },
+    {
+      "_id": "4f89920e3123",
+      "type": "expense",
+      "amount": 2000,
+      "description": "ماسحة",
+      "category": "shop",
+      "date": "2026-09-15",
+      "createdAt": 1789857190963
+    },
+    {
+      "_id": "558909baae08",
+      "type": "expense",
+      "amount": 2000,
+      "description": "فطور",
+      "category": "personal",
+      "date": "2026-09-15",
+      "createdAt": 1789857190964
+    },
+    {
+      "_id": "2b165124f0b4",
+      "type": "expense",
+      "amount": 14500,
+      "description": "شراء واير مولد ثاني",
+      "category": "shop",
+      "date": "2026-09-15",
+      "createdAt": 1789857190965
+    },
+    {
+      "_id": "a5f78c4047bc",
+      "type": "expense",
+      "amount": 4500,
+      "description": "شراء جهاز تحويل",
+      "category": "shop",
+      "date": "2026-09-15",
+      "createdAt": 1789857190966
+    },
+    {
+      "_id": "453d8f4e42e0",
+      "type": "expense",
+      "amount": 12000,
+      "description": "اجور الكهربائي",
+      "category": "shop",
+      "date": "2026-09-15",
+      "createdAt": 1789857190967
+    },
+    {
+      "_id": "49e50d96d0b",
+      "type": "expense",
+      "amount": 35000,
+      "description": "اسبوعية زكريا",
+      "category": "shop",
+      "date": "2026-09-16",
+      "createdAt": 1789857190968
+    },
+    {
+      "_id": "1a9e8bc0c1df",
+      "type": "expense",
+      "amount": 4000,
+      "description": "طباعة ملصقات",
+      "category": "shop",
+      "date": "2026-09-16",
+      "createdAt": 1789857190969
+    },
+    {
+      "_id": "207b5fd381f9",
+      "type": "expense",
+      "amount": 2000,
+      "description": "فطور",
+      "category": "personal",
+      "date": "2026-09-16",
+      "createdAt": 1789857190970
+    },
+    {
+      "_id": "114818623188",
+      "type": "expense",
+      "amount": 4000,
+      "description": "مصروف عام",
+      "category": "personal",
+      "date": "2026-09-16",
+      "createdAt": 1789857190971
+    }
+  ],
+  "subscriptions": []
+}
