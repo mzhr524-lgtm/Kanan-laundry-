@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kanan-laundry-v1';
+const CACHE_NAME = 'kanan-laundry-v2';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function(event) {
@@ -21,11 +21,17 @@ self.addEventListener('activate', function(event) {
   self.clients.claim();
 });
 
+// Network-first: always try to fetch the latest version first.
+// Only fall back to the saved copy if there's no internet connection.
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      return cached || fetch(event.request).catch(function() {
-        return caches.match('./index.html');
+    fetch(event.request).then(function(response) {
+      var copy = response.clone();
+      caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, copy); });
+      return response;
+    }).catch(function() {
+      return caches.match(event.request).then(function(cached) {
+        return cached || caches.match('./index.html');
       });
     })
   );
