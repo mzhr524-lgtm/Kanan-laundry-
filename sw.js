@@ -1,38 +1,39 @@
-const CACHE_NAME = 'kanan-laundry-v4';
-const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+// Kanan Laundry service worker — v5
+// Network-first: the app always tries to load the newest files, and falls back to the
+// saved copy when there is no internet. Bump CACHE on every update.
+var CACHE = 'kanan-laundry-v5';
+var CORE = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
-self.addEventListener('install', function(event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(APP_SHELL);
-    })
+self.addEventListener('install', function(e){
+  e.waitUntil(
+    caches.open(CACHE).then(function(c){
+      return Promise.all(CORE.map(function(u){ return c.add(u).catch(function(){}); }));
+    }).then(function(){ return self.skipWaiting(); })
   );
-  self.skipWaiting();
 });
 
-self.addEventListener('activate', function(event) {
-  event.waitUntil(
-    caches.keys().then(function(keys) {
-      return Promise.all(
-        keys.filter(function(k) { return k !== CACHE_NAME; }).map(function(k) { return caches.delete(k); })
-      );
-    })
+self.addEventListener('activate', function(e){
+  e.waitUntil(
+    caches.keys().then(function(keys){
+      return Promise.all(keys.filter(function(k){ return k !== CACHE; }).map(function(k){ return caches.delete(k); }));
+    }).then(function(){ return self.clients.claim(); })
   );
-  self.clients.claim();
 });
 
-// Network-first: always try to fetch the latest version first.
-// Only fall back to the saved copy if there's no internet connection.
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    fetch(event.request).then(function(response) {
-      var copy = response.clone();
-      caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, copy); });
-      return response;
-    }).catch(function() {
-      return caches.match(event.request).then(function(cached) {
-        return cached || caches.match('./index.html');
-      });
+self.addEventListener('fetch', function(e){
+  var req = e.request;
+  if(req.method !== 'GET') return;
+  var url = new URL(req.url);
+  if(url.origin !== location.origin) return; // fonts etc. go straight to the network
+  e.respondWith(
+    fetch(req).then(function(res){
+      if(res && res.status === 200){
+        var copy = res.clone();
+        caches.open(CACHE).then(function(c){ c.put(req, copy); });
+      }
+      return res;
+    }).catch(function(){
+      return caches.match(req).then(function(hit){ return hit || caches.match('index.html'); });
     })
   );
 });
