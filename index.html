@@ -782,10 +782,209 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
   #printArea .pr-bar i{ display:block; height:100%; background:#2e6fbf; }
   #printArea h2{ break-after:avoid; } #printArea table{ break-inside:auto; } #printArea tr{ break-inside:avoid; }
 }
+
+/* ===== Kanan v5 — settings sheet, drill-downs, subscriptions log, icons ===== */
+.ic{ width:1.2em; height:1.2em; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; vertical-align:-.2em; }
+.chev{ width:1em; height:1em; transition:transform .22s ease; }
+.rot-r{ transform:rotate(-90deg); } .rot-l{ transform:rotate(90deg); }
+body.no-scroll{ overflow:hidden; }
+.hidden-field{ display:none!important; }
+
+/* settings = full-screen sheet */
+#settingsPanel{ display:none; position:fixed; inset:0; z-index:90; margin:0; padding:0; border:none; border-radius:0; box-shadow:none;
+  background:radial-gradient(120% 40% at 100% 0%,var(--blob1),transparent 60%),var(--bg); overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+#settingsPanel.shown{ display:block; animation:sheetin .26s ease; }
+@keyframes sheetin{ from{ opacity:0; transform:translateY(18px);} to{ opacity:1; transform:none; } }
+.sheet-wrap{ max-width:560px; margin:0 auto; padding:0 16px calc(36px + env(safe-area-inset-bottom)); }
+.sheet-head{ position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:calc(14px + env(safe-area-inset-top)) 4px 12px; margin:0 -16px 6px; padding-inline:20px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(12px); }
+.sheet-head h2{ margin:0; font-family:var(--f-head); font-size:25px; font-weight:800; }
+.icon-btn.sheet-close{ background:var(--surface); color:var(--text); box-shadow:0 0 0 1px var(--border); }
+
+.acc{ background:var(--surface); border-radius:30px; margin-bottom:12px; box-shadow:var(--shadow),0 0 0 1px var(--border); overflow:hidden; }
+.acc-head{ width:100%; display:flex; align-items:center; gap:14px; padding:14px 16px; min-height:70px; background:none; border:none; font:inherit; color:inherit; text-align:right; cursor:pointer; }
+.acc-ic{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:21px;
+  background:color-mix(in srgb,var(--accent) 14%,transparent); color:var(--accent); }
+.acc-txt{ flex:1; min-width:0; display:flex; flex-direction:column; gap:1px; }
+.acc-txt b{ font-family:var(--f-head); font-size:17.5px; font-weight:700; }
+.acc-txt small{ font-size:12.5px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.acc-head .chev{ color:var(--text-dim); font-size:18px; }
+.acc.open .acc-head .chev{ transform:rotate(180deg); }
+.acc-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .26s ease; }
+.acc.open .acc-body{ grid-template-rows:1fr; }
+.acc-inner{ overflow:hidden; min-height:0; visibility:hidden; transition:visibility 0s .26s; }
+.acc.open .acc-inner{ visibility:visible; transition-delay:0s; }
+.acc-pad{ padding:2px 16px 18px; }
+.set-lbl{ font-size:13px; font-weight:700; color:var(--text-dim); margin:12px 6px 8px; }
+.set-lbl:first-child{ margin-top:2px; }
+.set-note{ font-size:12.5px; color:var(--text-dim); margin:2px 6px 12px; line-height:1.7; }
+.acc .cost-card{ padding:14px; }
+.acc .cost-field input{ padding:10px 12px; border-radius:16px; min-height:46px; }
+.acc .cost-field label{ font-size:12px; margin:0 4px 5px; }
+.acc .cost-card + .cost-card{ margin-top:10px; }
+.wide-btn{ width:100%; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.backup-row button{ display:flex; align-items:center; justify-content:center; gap:8px; }
+.price-add-row button, .price-add-row .ghost{ display:flex; align-items:center; gap:6px; white-space:nowrap; flex-shrink:0; }
+.price-add-row input{ min-width:0; padding:10px 14px; min-height:46px; }
+.price-row{ padding:6px 14px; min-height:46px; }
+.price-row .del-x{ min-width:40px; min-height:40px; font-size:15px; }
+
+.seg{ display:flex; gap:4px; padding:5px; background:var(--surface-2); border-radius:999px; }
+.seg-btn{ flex:1; display:flex; align-items:center; justify-content:center; gap:7px; min-height:44px; border:none; border-radius:999px; background:transparent; color:var(--text-dim); font:inherit; font-weight:700; font-size:14px; cursor:pointer; }
+.seg-btn.active{ background:var(--surface); color:var(--accent); box-shadow:0 8px 16px -10px color-mix(in srgb,var(--accent) 70%,transparent),0 0 0 1px var(--border); }
+
+.swatch-row{ display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin:4px 0; }
+.swatch{ width:auto; height:auto; border:none; border-radius:18px; background:none; padding:6px 0; display:flex; flex-direction:column; align-items:center; gap:7px; font:inherit; font-size:11.5px; font-weight:700; color:var(--text-dim); cursor:pointer; }
+.swatch i{ width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; background:var(--sw); transition:box-shadow .2s; }
+.swatch .ic{ opacity:0; transform:scale(.6); transition:.2s; }
+.swatch.selected{ color:var(--text); }
+.swatch.selected i{ box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--sw); }
+.swatch.selected .ic{ opacity:1; transform:none; }
+
+/* buttons / toggles with icons */
+.toggle-btn, .quick-scan-btn, button.ghost, button.primary, #btnCamToggle{ display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+.toggle-btn{ display:flex; } .quick-scan-btn{ display:flex; } button.primary{ display:flex; } #btnCamToggle{ display:flex; }
+.calc-toggle-btn{ display:flex; align-items:center; justify-content:center; gap:8px; }
+.piece-btn{ display:flex!important; align-items:center; justify-content:center; gap:8px; }
+.pdf-btn{ margin-top:10px; }
+.badge.warn{ background:color-mix(in srgb,var(--accent) 14%,transparent); }
+.pkg-status.mid{ background:color-mix(in srgb,var(--accent) 14%,transparent); }
+.ghost.danger{ color:var(--expense); border-color:var(--expense); }
+#toast{ z-index:200; }
+.storage-warn{ display:none; align-items:center; gap:8px; } .storage-warn.shown{ display:flex; }
+.export-reminder .er-text{ display:flex; align-items:center; gap:8px; }
+.er-x .ic{ width:1.1em; height:1.1em; }
+
+/* empty states */
+.empty-state .e-ic{ width:64px; height:64px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background:var(--surface-2); color:var(--accent); font-size:28px; margin-bottom:10px; }
+.scan-box .big-ic{ width:76px; height:76px; border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; background:color-mix(in srgb,var(--accent) 14%,transparent); color:var(--accent); font-size:34px; }
+
+/* category preview under expense description */
+.cat-preview{ display:flex; align-items:center; gap:8px; font-size:13px; margin:-4px 8px 12px; line-height:1.5; }
+.cat-preview:empty{ display:none; }
+.cat-preview.ok{ color:var(--text-dim); } .cat-preview.ok b{ color:var(--accent); }
+.cat-preview.warn{ color:var(--expense); }
+
+/* report period picker */
+.pick-row{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.pick-mid{ flex:1; min-width:0; } .pick-mid input{ text-align:center; }
+.pick-btn{ width:48px; height:48px; min-height:48px; padding:0!important; display:flex; align-items:center; justify-content:center; border-radius:50%!important; flex-shrink:0; }
+.pick-btn .chev{ font-size:20px; }
+
+/* chips */
+.chips{ display:flex; gap:8px; overflow-x:auto; padding:2px 2px 12px; scrollbar-width:none; }
+.chips::-webkit-scrollbar{ display:none; }
+.chip{ flex-shrink:0; border:none; background:var(--surface); color:var(--text-dim); font:inherit; font-weight:700; font-size:13px; padding:8px 16px; min-height:40px; border-radius:999px; box-shadow:0 0 0 1px var(--border); display:inline-flex; align-items:center; gap:7px; cursor:pointer; }
+.chip i{ font-style:normal; font-size:11.5px; opacity:.75; }
+.chip.active{ background:var(--accent); color:var(--accent-ink); box-shadow:none; }
+
+/* drill-down (tap a row → see the expenses behind it) */
+button.tap{ width:100%; background:none; border:none; font:inherit; color:inherit; text-align:right; cursor:pointer; }
+button.ins-row.tap{ align-items:center; padding:9px 2px; gap:10px; border-radius:14px; }
+button.ins-row.tap .il{ flex:1; }
+button.tap .chev{ color:var(--text-dim); flex-shrink:0; }
+button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+.drill{ margin:2px 0 10px; background:var(--surface-2); color:var(--text); border-radius:22px; padding:4px 14px 6px; animation:fadein .2s ease; }
+.drill[hidden]{ display:none!important; }
+.dl{ width:100%; display:flex; align-items:center; gap:10px; background:none; border:none; border-bottom:1px dashed var(--border); padding:10px 0; font:inherit; color:inherit; text-align:right; cursor:pointer; min-height:44px; }
+.dl-d{ font-size:11.5px; color:var(--text-dim); min-width:54px; }
+.dl-t{ flex:1; font-size:13.5px; font-weight:600; min-width:0; overflow-wrap:anywhere; }
+.dl-a{ font-size:13.5px; font-weight:800; direction:ltr; }
+.dl-plain{ cursor:default; }
+.dl-grp{ display:flex; justify-content:space-between; font-weight:800; font-size:13px; padding:10px 0 2px; color:var(--accent); }
+.dl-sum{ display:flex; justify-content:space-between; font-weight:800; font-size:13.5px; padding:10px 0 6px; }
+.dl-note{ font-size:11.5px; color:var(--text-dim); padding:0 0 6px; }
+.ins-note.rec{ padding:4px 16px 12px; }
+.rec-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0 6px; }
+.rec-top b, .rec-t{ font-weight:800; font-size:14px; line-height:1.6; }
+.rec-meta{ display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap; background:color-mix(in srgb,currentColor 13%,transparent); }
+.rec-d{ white-space:pre-line; font-size:13px; line-height:1.75; padding:0 0 4px; }
+.ins-note.rec .drill{ margin-top:8px; }
+.ins-row b.pos{ color:var(--income);} .ins-row b.neg{ color:var(--expense); }
+
+/* expenses grouped by item */
+.eg{ border-bottom:1px dashed var(--border); padding:4px 0 6px; }
+.eg:last-child{ border-bottom:none; }
+.eg-btn{ display:flex; align-items:center; gap:10px; padding:8px 2px; }
+.eg-main{ flex:1; display:flex; flex-direction:column; min-width:0; } .eg-main b{ font-size:14.5px; } .eg-main small{ font-size:12px; color:var(--text-dim); }
+.eg-val{ display:flex; flex-direction:column; align-items:flex-end; } .eg-val b{ font-size:14px; direction:ltr; } .eg-val small{ font-size:11.5px; color:var(--text-dim); }
+
+/* subscriptions log */
+.lg-day{ font-size:12px; font-weight:800; color:var(--text-dim); margin:16px 4px 4px; } .lg-day:first-child{ margin-top:4px; }
+.lg-row{ display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px dashed var(--border); }
+.lg-row:last-child{ border-bottom:none; }
+.lg-ic{ width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
+.k-ok{ background:var(--income-bg); color:var(--income); }
+.k-acc{ background:color-mix(in srgb,var(--accent) 14%,transparent); color:var(--accent); }
+.k-bad{ background:var(--expense-bg); color:var(--expense); }
+.k-dim{ background:var(--surface-2); color:var(--text-dim); }
+.lg-main{ flex:1; min-width:0; display:flex; flex-direction:column; }
+.lg-main b{ font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lg-main small{ font-size:12px; color:var(--text-dim); }
+.lg-v{ display:flex; flex-direction:column; align-items:flex-end; gap:2px; text-align:left; }
+.lg-v b{ font-size:13.5px; } .lg-v small{ font-size:11.5px; color:var(--text-dim); }
+.lg-bad{ font-size:12px; color:var(--expense); font-weight:700; max-width:150px; }
+.undo-btn{ margin-top:4px; border:none; background:var(--surface-2); color:var(--accent); font:inherit; font-weight:700; font-size:12px; padding:6px 12px; min-height:34px; border-radius:999px; display:inline-flex; gap:5px; align-items:center; cursor:pointer; }
+.more-btn{ width:100%; margin-top:10px; }
+.h-undo{ color:var(--text-dim); }
+
+/* subscription card */
+.sub-foot{ margin-top:8px; }
+.sub-tools{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+.tool{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-height:62px; padding:8px 4px; border:none; border-radius:22px; background:var(--surface-2); color:var(--text-dim); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+.tool .ic{ font-size:20px; }
+.tool[aria-expanded="true"]{ background:color-mix(in srgb,var(--accent) 14%,transparent); color:var(--accent); }
+.sub-card .piece-btn{ margin-top:12px; }
+.mini-row[onclick]{ cursor:pointer; }
+.dash-alert[onclick]{ cursor:pointer; }
+
+@media print{
+  #printArea .pr-list{ margin:6px 0 2px; } #printArea .pr-list td{ font-size:10.5px; padding:3px 6px; }
+  #printArea .pr-g td{ background:#eef3fa; font-weight:800; }
+  #printArea .pr-rec.has-list{ break-inside:auto; }
+}
 </style>
 </head>
 <body>
 <div id="app">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7a1 1 0 0 1 .7.3l7.6 7.6a1 1 0 0 1 0 1.4l-7.7 7.7a1 1 0 0 1-1.4 0l-7.6-7.6a1 1 0 0 1-.3-.7z"/><circle cx="8.5" cy="8.5" r="1.4"/></symbol>
+      <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M17.5 8V6.5A2.5 2.5 0 0 0 15 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20h11a2.5 2.5 0 0 0 2.5-2.5V15"/><path d="M20.5 10.5H17a2 2 0 0 0 0 4h3.5z"/></symbol>
+      <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3.5"/><path d="M8.5 7.5h7M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01"/></symbol>
+      <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 3l8 4.2v9.6L12 21l-8-4.2V7.2z"/><path d="M4 7.2l8 4.3 8-4.3M12 11.5V21"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4"/><path d="M5 19.5h14"/></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 15V4m0 0L8 8m4-4l4 4"/><path d="M5 19.5h14"/></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 2-.8 2-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+      <symbol id="i-auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2a1 1 0 0 0 .8-.4l.9-1.2A1 1 0 0 1 10.2 4h3.6a1 1 0 0 1 .8.4l.9 1.2a1 1 0 0 0 .8.4h1.2A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.3"/></symbol>
+      <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3"/><path d="M4 12h16"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 2.8 0l.2.2a2 2 0 0 1 0 2.8L8 19z"/><path d="M14.5 6.5l3 3"/></symbol>
+      <symbol id="i-renew" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 4v5h5"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 20v-5h-5"/></symbol>
+      <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="8" rx="2.5"/><path d="M7 14h10v6H7z"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.7 7.1L4 20l.9-4.2A8 8 0 1 1 20 12z"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12h7"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 15.5H3z"/><path d="M12 10v4M12 17h.01"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8.5h6M9 12h6"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+      <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9.5l1.5-5h13l1.5 5"/><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0"/><path d="M5.5 12.5V20h13v-7.5"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M4 13l2.5-7.5h11L20 13v5.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5z"/><path d="M4 13h4.5l1 2.5h5l1-2.5H20"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5l7.5 3v5.3c0 4.4-3.1 7.9-7.5 9.2-4.4-1.3-7.5-4.8-7.5-9.2V6.5z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.5h4V7M7 7l.8 12.5h8.4L17 7"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+    </defs>
+  </svg>
 
   <header class="top">
     <div class="brand-row">
@@ -794,7 +993,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
         <div class="brand-sub" id="todayLabel">—</div>
       </div>
       <div class="head-icons">
-        <button class="icon-btn" id="btnSettings" aria-label="الإعدادات">
+        <button class="icon-btn" id="btnSettings" aria-label="الإعدادات" aria-haspopup="dialog" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
         </button>
       </div>
@@ -802,119 +1001,180 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     <div class="sync-pill"><span class="dot" id="syncDot"></span><span id="syncTxt">محفوظ على هذا الجهاز</span></div>
   </header>
 
-  <div id="settingsPanel">
-    <div class="settings-title">وضع الإضاءة</div>
-    <div class="mode-row" id="modeRow">
-      <button class="mode-btn" data-mode="light">☀️ فاتح</button>
-      <button class="mode-btn" data-mode="dark">🌙 داكن</button>
-      <button class="mode-btn" data-mode="auto">⚙️ تلقائي</button>
-    </div>
-    <div class="settings-title">لون التطبيق</div>
-    <div class="swatch-row" id="swatchRow"></div>
-    <div class="settings-title">قائمة الأسعار السريعة</div>
-    <div class="settings-sub">أضف أسعار القطع الثابتة (قميص، دشداشة…) عشان تستخدمها بالحاسبة السريعة وقت تسجيل الدخل.</div>
-    <div id="priceListWrap"></div>
-    <div class="price-add-row">
-      <input type="text" id="priceName" class="pname" placeholder="اسم القطعة">
-      <input type="number" id="priceAmount" class="pprice" placeholder="السعر" inputmode="decimal">
-      <button class="ghost" id="btnAddPrice">+ إضافة</button>
-    </div>
-    <div class="settings-title" style="margin-top:16px;">🧮 حاسبة تكلفة القطعة</div>
-    <div class="settings-sub">أدخل مصاريفك الشهرية ومواد التغليف، وراح نطلعلك كلفة القطعة الحقيقية — حتى تعرف لحد وين تكدر تنزل بالخصومات وأنت مطمن.</div>
-    <div class="cost-card">
-      <div class="cost-sec-title">مصاريف ثابتة شهرية</div>
-      <div class="cost-row2">
-        <div class="cost-field"><label>إيجار المحل</label><input type="number" id="costRent" inputmode="decimal"></div>
-        <div class="cost-field"><label>أجور العامل</label><input type="number" id="costWorker" inputmode="decimal"></div>
-      </div>
-      <div class="cost-row2">
-        <div class="cost-field"><label>أجور الماي</label><input type="number" id="costWater" inputmode="decimal"></div>
-        <div class="cost-field"><label>أجور الكهرباء</label><input type="number" id="costElec" inputmode="decimal"></div>
-      </div>
-      <div class="cost-field"><label>صيانة ومصاريف عامة</label><input type="number" id="costMaint" inputmode="decimal"></div>
-
-      <div class="cost-sec-title">منظفات ومعطرات</div>
-      <div class="cost-row2">
-        <div class="cost-field"><label>السعر</label><input type="number" id="costCleanPrice" inputmode="decimal"></div>
-        <div class="cost-field"><label>تكفي لعدد أيام</label><input type="number" id="costCleanDays" inputmode="decimal"></div>
-      </div>
-
-      <div class="cost-sec-title">الغاز</div>
-      <div class="cost-row2">
-        <div class="cost-field"><label>سعر القنينة</label><input type="number" id="costGasPrice" inputmode="decimal"></div>
-        <div class="cost-field"><label>تكفي لعدد أيام</label><input type="number" id="costGasDays" inputmode="decimal"></div>
-      </div>
-
-      <div class="cost-sec-title">التغليف — رول النايلون</div>
-      <div class="cost-row2">
-        <div class="cost-field"><label>سعر الرول</label><input type="number" id="costNylonPrice" inputmode="decimal"></div>
-        <div class="cost-field"><label>يغلف عدد قطع</label><input type="number" id="costNylonQty" inputmode="decimal"></div>
-      </div>
-
-      <div class="cost-sec-title">التغليف — كيس التعاليك</div>
-      <div class="cost-row3">
-        <div class="cost-field"><label>سعر الكيس</label><input type="number" id="costHangerPrice" inputmode="decimal"></div>
-        <div class="cost-field"><label>عدد السيتات</label><input type="number" id="costHangerSets" inputmode="decimal"></div>
-        <div class="cost-field"><label>قطع بالسيت</label><input type="number" id="costHangerPerSet" inputmode="decimal"></div>
-      </div>
-
-      <div class="cost-sec-title">الإنتاج الشهري التقريبي</div>
-      <div class="cost-row2">
-        <div class="cost-field"><label>قطع باليوم تقريباً</label><input type="number" id="costPiecesDay" inputmode="decimal"></div>
-        <div class="cost-field"><label>أيام العمل بالشهر</label><input type="number" id="costWorkDays" inputmode="decimal"></div>
-      </div>
-
-      <button class="ghost" id="btnCalcCost" style="width:100%; margin-top:8px;">🧮 احسب تكلفة القطعة</button>
-
-      <div class="cost-result" id="costResultBox" style="display:none;">
-        <div class="cr-row"><span>تغليف (نايلون + تعاليك)</span><span id="crPack">0</span></div>
-        <div class="cr-row"><span>غاز</span><span id="crGas">0</span></div>
-        <div class="cr-row"><span>مصاريف ثابتة (إيجار، عامل، ماي، كهرباء، صيانة، منظفات)</span><span id="crFixed">0</span></div>
-        <div class="cr-total"><span class="lbl">تكلفة القطعة الوحدة</span><span class="val" id="crTotal">0</span></div>
-      </div>
+  <div id="settingsPanel" role="dialog" aria-modal="true" aria-labelledby="settingsH">
+   <div class="sheet-wrap">
+    <div class="sheet-head">
+      <h2 id="settingsH">الإعدادات</h2>
+      <button type="button" class="icon-btn sheet-close" id="btnSettingsClose" aria-label="إغلاق الإعدادات"><svg class="ic"><use href="#i-close"/></svg></button>
     </div>
 
-    <div class="settings-title" style="margin-top:16px;">📦 حاسبة خصم الباقات</div>
-    <div class="settings-sub">اختر قطعة من قائمة الأسعار (أو أدخل سعر يدوي)، حدد عدد قطع الباقة ونسبة الخصم، وراح نوريك إذا الخصم آمن أو خطر عليك.</div>
-    <div class="cost-card pkg-calc">
-      <select id="pkgItemSelect" class="pkg-select"></select>
-      <div class="cost-row3">
-        <div class="cost-field"><label>سعر القطعة الأصلي</label><input type="number" id="pkgOrigPrice" inputmode="decimal"></div>
-        <div class="cost-field"><label>عدد قطع الباقة</label><input type="number" id="pkgCount" inputmode="decimal" value="10"></div>
-        <div class="cost-field"><label>نسبة الخصم %</label><input type="number" id="pkgDiscount" inputmode="decimal" value="10"></div>
-      </div>
-      <button class="ghost" id="btnCalcPkg" style="width:100%; margin-top:6px;">📦 احسب الباقة</button>
-      <div class="pkg-result" id="pkgResultBox" style="display:none;">
-        <div class="pr-line"><span>سعر القطعة بعد الخصم</span><span id="prAfter">0</span></div>
-        <div class="pr-line"><span>مجموع الباقة</span><span id="prTotal">0</span></div>
-        <div class="pr-line"><span>ربحك من القطعة الوحدة</span><span id="prProfit">0</span></div>
-        <div class="pr-line total"><span>تكلفة القطعة (من الحاسبة أعلاه)</span><span id="prCost">0</span></div>
-        <div class="pkg-status" id="pkgStatus"></div>
-      </div>
-    </div>
+    <section class="acc" id="acc-prices">
+      <button type="button" class="acc-head" aria-expanded="false" aria-controls="accb-prices">
+        <span class="acc-ic"><svg class="ic"><use href="#i-tag"/></svg></span>
+        <span class="acc-txt"><b>قائمة الأسعار</b><small id="sumPrices">—</small></span>
+        <svg class="ic chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body" id="accb-prices"><div class="acc-inner"><div class="acc-pad">
+        <div class="set-note">أسعار القطع الثابتة (قميص، دشداشة…) تطلع بالحاسبة السريعة وقت تسجيل الدخل.</div>
+        <div id="priceListWrap"></div>
+        <div class="price-add-row">
+          <input type="text" id="priceName" class="pname" placeholder="اسم القطعة" aria-label="اسم القطعة">
+          <input type="number" id="priceAmount" class="pprice" placeholder="السعر" inputmode="decimal" aria-label="السعر">
+          <button class="ghost" id="btnAddPrice" type="button"><svg class="ic"><use href="#i-plus"/></svg> إضافة</button>
+        </div>
+      </div></div></div>
+    </section>
 
-    <div class="settings-title" style="margin-top:16px;">خطة الصرف</div>
-    <div class="cost-row3" style="grid-template-columns:1fr 1fr;">
-      <div class="cost-field"><label>أجرة العامل الأسبوعية</label><input type="number" id="cfgWage" inputmode="decimal"></div>
-      <div class="cost-field"><label>سقف مصروفي الشخصي بالأسبوع</label><input type="number" id="cfgCap" inputmode="decimal" placeholder="مثال: 100000"></div>
-    </div>
-    <div class="hint">السقف يطلع بالرئيسية كشريط، وكل مرة تسجل مصروف شخصي يقلك كم باقي.</div>
-    <div class="settings-title" style="margin-top:16px;">نسخة احتياطية</div>
-    <div class="settings-sub">صدّر بياناتك كملف واحفظه في جوجل درايف أو أي مكان آخر — واستوردها لاحقاً على أي جهاز.</div>
-    <div class="backup-row">
-      <button class="ghost" id="btnExport">⬇ تصدير نسخة</button>
-      <button class="ghost" id="btnImportTrigger">⬆ استيراد نسخة</button>
-    </div>
-    <input type="file" id="importFile" accept="application/json">
+    <section class="acc" id="acc-plan">
+      <button type="button" class="acc-head" aria-expanded="false" aria-controls="accb-plan">
+        <span class="acc-ic"><svg class="ic"><use href="#i-wallet"/></svg></span>
+        <span class="acc-txt"><b>خطة الصرف</b><small id="sumPlan">—</small></span>
+        <svg class="ic chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body" id="accb-plan"><div class="acc-inner"><div class="acc-pad">
+        <div class="set-note">حدد سقف لمصروفك الشخصي بالأسبوع. يطلع كشريط بالرئيسية، وكل مرة تسجل مصروف شخصي يگلك كم باقي.</div>
+        <div class="cost-card">
+          <div class="cost-row2">
+            <div class="cost-field"><label>أجرة العامل الأسبوعية</label><input type="number" id="cfgWage" inputmode="decimal"></div>
+            <div class="cost-field"><label>سقف مصروفي الشخصي بالأسبوع</label><input type="number" id="cfgCap" inputmode="decimal" placeholder="مثال: 100000"></div>
+          </div>
+        </div>
+      </div></div></div>
+    </section>
+
+    <section class="acc" id="acc-cost">
+      <button type="button" class="acc-head" aria-expanded="false" aria-controls="accb-cost">
+        <span class="acc-ic"><svg class="ic"><use href="#i-calc"/></svg></span>
+        <span class="acc-txt"><b>حاسبة تكلفة القطعة</b><small id="sumCost">—</small></span>
+        <svg class="ic chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body" id="accb-cost"><div class="acc-inner"><div class="acc-pad">
+        <div class="set-note">أدخل مصاريفك الشهرية ومواد التغليف، ونطلعلك كلفة القطعة الحقيقية. حتى تعرف لحد وين تكدر تنزل بالخصومات وأنت مطمّن.</div>
+        <div class="cost-card">
+          <div class="cost-sec-title">مصاريف ثابتة شهرية</div>
+          <div class="cost-row2">
+            <div class="cost-field"><label>إيجار المحل</label><input type="number" id="costRent" inputmode="decimal"></div>
+            <div class="cost-field"><label>أجور العامل</label><input type="number" id="costWorker" inputmode="decimal"></div>
+          </div>
+          <div class="cost-row2">
+            <div class="cost-field"><label>أجور الماي</label><input type="number" id="costWater" inputmode="decimal"></div>
+            <div class="cost-field"><label>أجور الكهرباء</label><input type="number" id="costElec" inputmode="decimal"></div>
+          </div>
+          <div class="cost-field"><label>صيانة ومصاريف عامة</label><input type="number" id="costMaint" inputmode="decimal"></div>
+
+          <div class="cost-sec-title">منظفات ومعطرات</div>
+          <div class="cost-row2">
+            <div class="cost-field"><label>السعر</label><input type="number" id="costCleanPrice" inputmode="decimal"></div>
+            <div class="cost-field"><label>تكفي لعدد أيام</label><input type="number" id="costCleanDays" inputmode="decimal"></div>
+          </div>
+
+          <div class="cost-sec-title">الغاز</div>
+          <div class="cost-row2">
+            <div class="cost-field"><label>سعر القنينة</label><input type="number" id="costGasPrice" inputmode="decimal"></div>
+            <div class="cost-field"><label>تكفي لعدد أيام</label><input type="number" id="costGasDays" inputmode="decimal"></div>
+          </div>
+
+          <div class="cost-sec-title">التغليف — رول النايلون</div>
+          <div class="cost-row2">
+            <div class="cost-field"><label>سعر الرول</label><input type="number" id="costNylonPrice" inputmode="decimal"></div>
+            <div class="cost-field"><label>يغلف عدد قطع</label><input type="number" id="costNylonQty" inputmode="decimal"></div>
+          </div>
+
+          <div class="cost-sec-title">التغليف — كيس التعاليك</div>
+          <div class="cost-row3">
+            <div class="cost-field"><label>سعر الكيس</label><input type="number" id="costHangerPrice" inputmode="decimal"></div>
+            <div class="cost-field"><label>عدد السيتات</label><input type="number" id="costHangerSets" inputmode="decimal"></div>
+            <div class="cost-field"><label>قطع بالسيت</label><input type="number" id="costHangerPerSet" inputmode="decimal"></div>
+          </div>
+
+          <div class="cost-sec-title">الإنتاج الشهري التقريبي</div>
+          <div class="cost-row2">
+            <div class="cost-field"><label>قطع باليوم تقريباً</label><input type="number" id="costPiecesDay" inputmode="decimal"></div>
+            <div class="cost-field"><label>أيام العمل بالشهر</label><input type="number" id="costWorkDays" inputmode="decimal"></div>
+          </div>
+
+          <button class="ghost wide-btn" id="btnCalcCost" type="button"><svg class="ic"><use href="#i-calc"/></svg> احسب تكلفة القطعة</button>
+
+          <div class="cost-result" id="costResultBox" style="display:none;">
+            <div class="cr-row"><span>تغليف (نايلون + تعاليك)</span><span id="crPack">0</span></div>
+            <div class="cr-row"><span>غاز</span><span id="crGas">0</span></div>
+            <div class="cr-row"><span>مصاريف ثابتة (إيجار، عامل، ماي، كهرباء، صيانة، منظفات)</span><span id="crFixed">0</span></div>
+            <div class="cr-total"><span class="lbl">تكلفة القطعة الوحدة</span><span class="val" id="crTotal">0</span></div>
+          </div>
+        </div>
+      </div></div></div>
+    </section>
+
+    <section class="acc" id="acc-pkg">
+      <button type="button" class="acc-head" aria-expanded="false" aria-controls="accb-pkg">
+        <span class="acc-ic"><svg class="ic"><use href="#i-box"/></svg></span>
+        <span class="acc-txt"><b>حاسبة خصم الباقات</b><small id="sumPkg">—</small></span>
+        <svg class="ic chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body" id="accb-pkg"><div class="acc-inner"><div class="acc-pad">
+        <div class="set-note">اختر قطعة من قائمة الأسعار (أو أدخل سعر يدوي)، حدد عدد قطع الباقة ونسبة الخصم، ونوريك إذا الخصم آمن لو خطر عليك.</div>
+        <div class="cost-card pkg-calc">
+          <select id="pkgItemSelect" class="pkg-select" aria-label="القطعة"></select>
+          <div class="cost-row3">
+            <div class="cost-field"><label>سعر القطعة الأصلي</label><input type="number" id="pkgOrigPrice" inputmode="decimal"></div>
+            <div class="cost-field"><label>عدد قطع الباقة</label><input type="number" id="pkgCount" inputmode="decimal" value="10"></div>
+            <div class="cost-field"><label>نسبة الخصم %</label><input type="number" id="pkgDiscount" inputmode="decimal" value="10"></div>
+          </div>
+          <button class="ghost wide-btn" id="btnCalcPkg" type="button"><svg class="ic"><use href="#i-box"/></svg> احسب الباقة</button>
+          <div class="pkg-result" id="pkgResultBox" style="display:none;">
+            <div class="pr-line"><span>سعر القطعة بعد الخصم</span><span id="prAfter">0</span></div>
+            <div class="pr-line"><span>مجموع الباقة</span><span id="prTotal">0</span></div>
+            <div class="pr-line"><span>ربحك من القطعة الوحدة</span><span id="prProfit">0</span></div>
+            <div class="pr-line total"><span>تكلفة القطعة (من الحاسبة اللي قبلها)</span><span id="prCost">0</span></div>
+            <div class="pkg-status" id="pkgStatus"></div>
+          </div>
+        </div>
+      </div></div></div>
+    </section>
+
+    <section class="acc" id="acc-backup">
+      <button type="button" class="acc-head" aria-expanded="false" aria-controls="accb-backup">
+        <span class="acc-ic"><svg class="ic"><use href="#i-shield"/></svg></span>
+        <span class="acc-txt"><b>النسخ الاحتياطي</b><small id="sumBackup">—</small></span>
+        <svg class="ic chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body" id="accb-backup"><div class="acc-inner"><div class="acc-pad">
+        <div class="set-note">صدّر بياناتك كملف واحفظه بجوجل درايف أو أي مكان ثاني، واستورده بعدين على أي جهاز. النسخة تشمل الحركات والاشتراكات وسجلها والأسعار والمواعيد وإعدادات الصرف.</div>
+        <div class="backup-row">
+          <button class="ghost" id="btnExport" type="button"><svg class="ic"><use href="#i-down"/></svg> تصدير نسخة</button>
+          <button class="ghost" id="btnImportTrigger" type="button"><svg class="ic"><use href="#i-up"/></svg> استيراد نسخة</button>
+        </div>
+        <input type="file" id="importFile" accept="application/json">
+      </div></div></div>
+    </section>
+
+    <section class="acc" id="acc-look">
+      <button type="button" class="acc-head" aria-expanded="false" aria-controls="accb-look">
+        <span class="acc-ic"><svg class="ic"><use href="#i-palette"/></svg></span>
+        <span class="acc-txt"><b>المظهر</b><small id="sumLook">—</small></span>
+        <svg class="ic chev"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body" id="accb-look"><div class="acc-inner"><div class="acc-pad">
+        <div class="set-lbl">وضع الإضاءة</div>
+        <div class="seg" id="modeRow">
+          <button type="button" class="seg-btn" data-mode="light"><svg class="ic"><use href="#i-sun"/></svg> فاتح</button>
+          <button type="button" class="seg-btn" data-mode="dark"><svg class="ic"><use href="#i-moon"/></svg> داكن</button>
+          <button type="button" class="seg-btn" data-mode="auto"><svg class="ic"><use href="#i-auto"/></svg> تلقائي</button>
+        </div>
+        <div class="set-lbl">لون التطبيق</div>
+        <div class="swatch-row" id="swatchRow"></div>
+      </div></div></div>
+    </section>
+   </div>
   </div>
 
   <main>
-    <div class="storage-warn" id="storageWarn">⚠️ لا يمكن الحفظ على هذا الجهاز — تحقق من إعدادات المتصفح (وضع التصفح الخفي يمنع الحفظ).</div>
+    <div class="storage-warn" id="storageWarn"><svg class="ic"><use href="#i-alert"/></svg> لا يمكن الحفظ على هذا الجهاز. تحقق من إعدادات المتصفح (وضع التصفح الخفي يمنع الحفظ).</div>
     <div class="export-reminder" id="exportReminder">
-      <span class="er-text">📤 ما سوّيت نسخة احتياطية اليوم — خلي بياناتك بأمان</span>
+      <span class="er-text"><svg class="ic"><use href="#i-shield"/></svg> ما سويت نسخة احتياطية اليوم. خلي بياناتك بأمان</span>
       <div class="er-actions">
         <button class="ghost" id="btnReminderExport">تصدير الآن</button>
-        <button class="er-x" id="btnReminderDismiss">✕</button>
+        <button class="er-x" id="btnReminderDismiss" aria-label="إخفاء"><svg class="ic"><use href="#i-close"/></svg></button>
       </div>
     </div>
 
@@ -930,7 +1190,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       </div>
 
       <div id="dashInsight"></div>
-      <button class="quick-scan-btn" id="btnQuickScan">📷 افتح الكاميرا وامسح باركود الآن</button>
+      <button class="quick-scan-btn" id="btnQuickScan"><svg class="ic"><use href="#i-camera"/></svg> افتح الكاميرا وامسح باركود الآن</button>
 
       <h2 class="section-title">اشتراكات تحتاج انتباه</h2>
       <div class="mini-list" id="attentionList"></div>
@@ -949,11 +1209,11 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
         <div class="field hidden-field" id="txCategoryField">
           <label>نوع المصروف</label>
           <div class="toggle-group">
-            <button type="button" class="toggle-btn sel-shop active" id="btnCatShop">🏬 مصروف المحل</button>
-            <button type="button" class="toggle-btn sel-personal" id="btnCatPersonal">👤 مصروف شخصي</button>
+            <button type="button" class="toggle-btn sel-shop active" id="btnCatShop"><svg class="ic"><use href="#i-store"/></svg> مصروف المحل</button>
+            <button type="button" class="toggle-btn sel-personal" id="btnCatPersonal"><svg class="ic"><use href="#i-user"/></svg> مصروف شخصي</button>
           </div>
         </div>
-        <button type="button" class="calc-toggle-btn hidden-field" id="btnCalcToggle" style="margin-top:2px;">🧮 حاسبة سريعة (اختياري)</button>
+        <button type="button" class="calc-toggle-btn hidden-field" id="btnCalcToggle" style="margin-top:2px;"><svg class="ic"><use href="#i-calc"/></svg> حاسبة سريعة (اختياري)</button>
         <div class="calc-panel hidden-field" id="calcPanel">
           <div id="calcItemsWrap"></div>
           <div class="calc-total-row"><span class="ct-label">المجموع</span><span class="ct-val" id="calcTotal">0</span></div>
@@ -964,6 +1224,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
           <div class="field"><label>التاريخ</label><input type="date" id="txDate"></div>
         </div>
         <div class="field hidden-field" id="txDescField"><label>وش صرفت؟ (الوصف)</label><input type="text" id="txDesc" placeholder="مثال: فاتورة كهرباء، مواد تنظيف…"></div>
+        <div class="cat-preview" id="catPreview" aria-live="polite"></div>
         <button class="primary" id="btnAddTx">إضافة</button>
       </div>
 
@@ -1026,10 +1287,10 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     <!-- SCAN -->
     <section class="tab" data-tab="scan">
       <div class="scan-box">
-        <div class="big-emoji">🔖</div>
+        <div class="big-ic"><svg class="ic"><use href="#i-scan"/></svg></div>
         <div style="font-weight:800; font-size:14.5px;">امسح باركود الاشتراك</div>
         <div class="hint">وجّه الكاميرا على باركود بطاقة المشترك وينخصم تلقائياً</div>
-        <div style="margin-top:14px;"><button class="ghost" id="btnCamToggle">📷 افتح الكاميرا وامسح</button></div>
+        <div style="margin-top:14px;"><button class="ghost" id="btnCamToggle"><svg class="ic"><use href="#i-camera"/></svg> افتح الكاميرا وامسح</button></div>
         <div id="camWrap"><video id="camVideo" autoplay playsinline muted></video></div>
         <div class="cam-unsupported" id="camUnsupportedMsg" style="display:none;">المسح بالكاميرا غير مدعوم على هذا المتصفح — جرّب كروم على أندرويد، أو استخدم زر «خصم قطعة» من بطاقة المشترك.</div>
       </div>
@@ -1039,24 +1300,24 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
         <div class="result-sub" id="scanResultSub"></div>
       </div>
 
-      <h2 class="section-title">سجل المسح (محفوظ دائماً)</h2>
-      <div class="card" id="scanLogCard"><div class="empty-state"><div class="e-emoji">🗂️</div><div class="e-txt">لا توجد عمليات مسح بعد</div></div></div>
+      <h2 class="section-title">سجل الاشتراكات</h2>
+      <div class="set-note" style="margin-top:-6px">كل مسح وخصم يدوي وتجديد وتعديل. محفوظ دائماً ويدخل بالنسخة الاحتياطية.</div>
+      <div class="chips" id="logChips"></div>
+      <div class="card" id="scanLogCard"></div>
     </section>
 
     <!-- REPORTS -->
     <section class="tab" data-tab="reports">
-      <div class="report-mode-row">
-        <button class="mode-btn active" id="reportModeMonth">شهري</button>
-        <button class="mode-btn" id="reportModeYear">سنوي</button>
+      <div class="seg" style="margin-bottom:12px">
+        <button type="button" class="seg-btn active" id="reportModeMonth">شهري</button>
+        <button type="button" class="seg-btn" id="reportModeYear">سنوي</button>
       </div>
 
-      <div id="reportMonthPicker">
-        <h2 class="section-title" style="margin-top:0">تقرير الشهر</h2>
-        <div class="field"><input type="month" id="reportMonth"></div>
-      </div>
-      <div id="reportYearPicker" class="hidden-field">
-        <h2 class="section-title" style="margin-top:0">تقرير السنة</h2>
-        <div class="field"><input type="number" id="reportYear" min="2020" max="2100"></div>
+      <div class="pick-row">
+        <button type="button" class="ghost pick-btn" id="rptPrev" aria-label="الفترة السابقة"><svg class="ic chev rot-r"><use href="#i-chev"/></svg></button>
+        <div id="reportMonthPicker" class="pick-mid"><input type="month" id="reportMonth" aria-label="الشهر"></div>
+        <div id="reportYearPicker" class="pick-mid hidden-field"><input type="number" id="reportYear" min="2020" max="2100" aria-label="السنة"></div>
+        <button type="button" class="ghost pick-btn" id="rptNext" aria-label="الفترة التالية"><svg class="ic chev rot-l"><use href="#i-chev"/></svg></button>
       </div>
 
       <div class="report-grid">
@@ -1070,16 +1331,25 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       <div id="insightsWrap"></div>
 
       <h2 class="section-title" id="dailyBarsTitle">الدخل اليومي خلال الشهر</h2>
-      <div class="card" id="dailyBars"><div class="empty-state"><div class="e-emoji">📊</div><div class="e-txt">لا توجد بيانات لهذا الشهر</div></div></div>
+      <div class="card" id="dailyBars"></div>
 
       <h2 class="section-title" id="expenseBarsTitle">المصروفات خلال الشهر</h2>
       <div class="bar-legend"><span class="bl-item"><span class="bl-dot shop"></span> مصروف المحل</span><span class="bl-item"><span class="bl-dot personal"></span> مصروف شخصي</span></div>
-      <div class="card" id="expenseBars"><div class="empty-state"><div class="e-emoji">📊</div><div class="e-txt">لا توجد مصروفات لهذه الفترة</div></div></div>
+      <div class="card" id="expenseBars"></div>
 
       <h2 class="section-title">تفاصيل المصروفات</h2>
+      <div class="seg" id="expViewSeg" style="margin-bottom:10px">
+        <button type="button" class="seg-btn active" data-ev="day">حسب اليوم</button>
+        <button type="button" class="seg-btn" data-ev="bucket">حسب البند</button>
+      </div>
+      <div class="chips" id="expFilterChips">
+        <button type="button" class="chip active" data-ef="all">الكل</button>
+        <button type="button" class="chip" data-ef="shop">مصروف المحل</button>
+        <button type="button" class="chip" data-ef="personal">شخصي</button>
+      </div>
       <div id="expenseDetailList"></div>
 
-      <button class="primary" id="btnPrintReport" style="margin-top:6px;">🖨️ تحميل التقرير PDF</button>
+      <button class="primary pdf-btn" id="btnPrintReport" type="button"><svg class="ic"><use href="#i-printer"/></svg> تحميل التقرير PDF</button>
     </section>
   </main>
 
@@ -1125,8 +1395,8 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       <div class="field hidden-field" id="editTxCategoryField">
         <label>نوع المصروف</label>
         <div class="toggle-group">
-          <button type="button" class="toggle-btn sel-shop" id="editBtnCatShop">🏬 مصروف المحل</button>
-          <button type="button" class="toggle-btn sel-personal" id="editBtnCatPersonal">👤 مصروف شخصي</button>
+          <button type="button" class="toggle-btn sel-shop" id="editBtnCatShop"><svg class="ic"><use href="#i-store"/></svg> مصروف المحل</button>
+          <button type="button" class="toggle-btn sel-personal" id="editBtnCatPersonal"><svg class="ic"><use href="#i-user"/></svg> مصروف شخصي</button>
         </div>
       </div>
       <div class="modal-actions">
@@ -1151,6 +1421,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       <div class="field"><label>تاريخ الانتهاء</label><input type="date" id="modExpiry"></div>
       <div class="field"><label>الباقة تشمل (يطبع بالبطاقة)</label><input type="text" id="modCoverage" placeholder="مثال: البدلات العسكرية فقط"></div>
       <div class="field hidden-field" id="modPriceField"><label>سعر التجديد (اختياري — يسجل كدخل)</label><input type="number" id="modPrice" inputmode="decimal"></div>
+      <button class="ghost danger wide-btn hidden-field" id="subModalDelete" type="button"><svg class="ic"><use href="#i-trash"/></svg> حذف الاشتراك</button>
       <div class="modal-actions">
         <button class="ghost" id="subModalCancel">إلغاء</button>
         <button class="primary" id="subModalSave" style="width:auto; padding:10px 22px;">حفظ</button>
@@ -1240,7 +1511,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
   function setTab(name){
     tabSections.forEach(function(s){ s.classList.toggle('active', s.dataset.tab === name); });
     tabBtns.forEach(function(b){ b.classList.toggle('active', b.dataset.nav === name); });
-    document.getElementById('settingsPanel').classList.remove('shown');
+    closeSettings();
     if(name === 'reports'){ renderReport(); }
     if(name === 'appts'){ renderAppointments(); }
   }
@@ -1276,8 +1547,37 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
 
   // ---------------- Settings panel ----------------
   var settingsPanel = document.getElementById('settingsPanel');
-  document.getElementById('btnSettings').addEventListener('click', function(){
-    settingsPanel.classList.toggle('shown');
+  var settingsOpen = false;
+  function openSettings(){
+    if(settingsOpen) return;
+    settingsOpen = true;
+    settingsPanel.classList.add('shown');
+    document.body.classList.add('no-scroll');
+    settingsPanel.scrollTop = 0;
+    try{ history.pushState({kset:1}, ''); }catch(e){}
+    refreshSettingsSummaries();
+    document.getElementById('btnSettings').setAttribute('aria-expanded','true');
+    setTimeout(function(){ var c=document.getElementById('btnSettingsClose'); if(c) c.focus(); }, 60);
+  }
+  function closeSettings(fromPop){
+    if(!settingsOpen) return;
+    settingsOpen = false;
+    settingsPanel.classList.remove('shown');
+    document.body.classList.remove('no-scroll');
+    var g = document.getElementById('btnSettings');
+    g.setAttribute('aria-expanded','false');
+    if(!fromPop){ try{ if(history.state && history.state.kset) history.back(); }catch(e){} }
+  }
+  window.addEventListener('popstate', function(){ if(settingsOpen) closeSettings(true); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && settingsOpen) closeSettings(); });
+  document.getElementById('btnSettings').addEventListener('click', function(){ settingsOpen ? closeSettings() : openSettings(); });
+  document.getElementById('btnSettingsClose').addEventListener('click', function(){ closeSettings(); });
+  document.querySelectorAll('.acc-head').forEach(function(h){
+    h.addEventListener('click', function(){
+      var a = h.parentNode, open = !a.classList.contains('open');
+      a.classList.toggle('open', open);
+      h.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
   });
 
   // Light / dark / auto mode
@@ -1289,9 +1589,12 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       mode = 'auto';
     }
     try{ localStorage.setItem(LS_MODE, mode); }catch(e){}
-    document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.mode === mode); });
+    curMode = mode;
+    document.querySelectorAll('#modeRow .seg-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.mode === mode); });
+    try{ refreshSettingsSummaries(); }catch(e){}
   }
-  document.querySelectorAll('.mode-btn').forEach(function(b){
+  var curMode = 'light', curTheme = 'blue';
+  document.querySelectorAll('#modeRow .seg-btn').forEach(function(b){
     b.addEventListener('click', function(){ applyMode(b.dataset.mode); });
   });
   var savedMode = 'light';
@@ -1309,7 +1612,10 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     document.documentElement.style.setProperty('--accent-soft', t.soft);
     document.documentElement.style.setProperty('--accent-ink', relLuminance(t.accent) > 0.55 ? '#15222F' : '#FFFFFF');
     try{ localStorage.setItem(LS_THEME, key); }catch(e){}
-    document.querySelectorAll('.swatch').forEach(function(sw){ sw.classList.toggle('selected', sw.dataset.key === key); });
+    curTheme = key;
+    var tc = document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content', t.accent);
+    document.querySelectorAll('.swatch').forEach(function(sw){ sw.classList.toggle('selected', sw.dataset.key === key); sw.setAttribute('aria-pressed', sw.dataset.key === key ? 'true' : 'false'); });
+    try{ refreshSettingsSummaries(); }catch(e){}
   }
   function buildSwatches(){
     var row = document.getElementById('swatchRow');
@@ -1317,10 +1623,11 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     Object.keys(THEMES).forEach(function(key){
       var t = THEMES[key];
       var b = document.createElement('button');
+      b.type = 'button';
       b.className = 'swatch';
       b.dataset.key = key;
-      b.style.background = t.accent;
-      b.title = t.name;
+      b.style.setProperty('--sw', t.accent);
+      b.innerHTML = '<i><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></i><span>' + t.name + '</span>';
       b.addEventListener('click', function(){ applyTheme(key); });
       row.appendChild(b);
     });
@@ -1374,6 +1681,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     catField.classList.toggle('hidden-field', txType === 'income');
     calcToggleBtn.classList.toggle('hidden-field', txType === 'expense');
     if(txType === 'expense'){ calcPanelEl.classList.remove('shown'); }
+    updateCatPreview();
   }
   refreshExpenseFieldsVisibility();
   document.getElementById('btnTypeIncome').addEventListener('click', function(){
@@ -1389,12 +1697,12 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     refreshExpenseFieldsVisibility();
   });
   document.getElementById('btnCatShop').addEventListener('click', function(){
-    txCategory='shop';
+    txCategory='shop'; updateCatPreview();
     this.classList.add('active');
     document.getElementById('btnCatPersonal').classList.remove('active');
   });
   document.getElementById('btnCatPersonal').addEventListener('click', function(){
-    txCategory='personal';
+    txCategory='personal'; updateCatPreview();
     this.classList.add('active');
     document.getElementById('btnCatShop').classList.remove('active');
   });
@@ -1417,6 +1725,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     document.getElementById('txAmount').value = '';
     document.getElementById('txDesc').value = '';
     calcDescription = '';
+    updateCatPreview();
     resetCalculator();
     renderAll();
   });
@@ -1529,6 +1838,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
 
   function deleteSub(id){
     var sub = state.subscriptions.find(function(s){ return s._id===id; });
+    if(sub && !window.confirm('حذف اشتراك «' + sub.customerName + '» نهائياً؟ سجل عملياته يختفي معه.')) return;
     var linked = (sub && sub.linkedIncomeIds) ? sub.linkedIncomeIds.filter(function(txId){
       return state.transactions.some(function(t){ return t._id===txId; });
     }) : [];
@@ -1553,7 +1863,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     if(!sub) return;
     subModalId = id;
     subModalMode = mode;
-    document.getElementById('subModalTitle').textContent = mode === 'renew' ? ('🔄 تجديد اشتراك — ' + sub.customerName) : ('✏️ تعديل اشتراك — ' + sub.customerName);
+    document.getElementById('subModalTitle').textContent = mode === 'renew' ? ('تجديد اشتراك — ' + sub.customerName) : ('تعديل اشتراك — ' + sub.customerName);
     document.getElementById('modCustomer').value = sub.customerName;
     document.getElementById('modPhone').value = sub.phone || '';
     document.getElementById('modPackage').value = sub.packageName;
@@ -1563,12 +1873,14 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     document.getElementById('modCoverage').value = sub.coverage || '';
     document.getElementById('modPrice').value = '';
     document.getElementById('modPriceField').classList.toggle('hidden-field', mode !== 'renew');
+    document.getElementById('subModalDelete').classList.toggle('hidden-field', mode !== 'edit');
     // In renew mode, total pieces field mirrors remaining (fresh cycle)
     document.getElementById('modTotalPieces').readOnly = false;
     subModalOverlay.classList.add('shown');
   }
   window.openSubModal = openSubModal;
   document.getElementById('subModalCancel').addEventListener('click', function(){ subModalOverlay.classList.remove('shown'); subModalId=null; });
+  document.getElementById('subModalDelete').addEventListener('click', function(){ var id = subModalId; subModalOverlay.classList.remove('shown'); subModalId = null; if(id) deleteSub(id); });
   document.getElementById('subModalSave').addEventListener('click', function(){
     var sub = state.subscriptions.find(function(s){ return s._id===subModalId; });
     if(!sub) return;
@@ -1734,6 +2046,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var box = document.getElementById('bc-'+id);
     if(!box) return;
     box.classList.toggle('shown');
+    var tb = document.querySelector('[data-bcbtn="'+id+'"]'); if(tb) tb.setAttribute('aria-expanded', box.classList.contains('shown') ? 'true' : 'false');
     if(box.classList.contains('shown') && !box.dataset.rendered){
       var sub = state.subscriptions.find(function(s){ return s._id===id; });
       if(sub){
@@ -1766,6 +2079,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
 
   // ---------------- Price list ----------------
   function renderPriceList(){
+    refreshSettingsSummaries();
     var wrap = document.getElementById('priceListWrap');
     if(!state.prices.length){
       wrap.innerHTML = '<div class="calc-empty">ما أضفت أسعار قطع بعد</div>';
@@ -1876,6 +2190,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var prCostEl = document.getElementById('prCost');
     if(prCostEl) prCostEl.textContent = fmtNum(Math.round(total)) + ' د.ع';
 
+    refreshSettingsSummaries();
     if(!silent) toast('تم حساب التكلفة ✓');
   }
   document.getElementById('btnCalcCost').addEventListener('click', function(){ computeCost(false); });
@@ -2122,7 +2437,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
   }
 
   async function doExport(){
-    var payload = JSON.stringify({ app:'kanan-laundry', exportedAt: new Date().toISOString(), transactions: state.transactions, subscriptions: state.subscriptions }, null, 2);
+    var payload = JSON.stringify({ app:'kanan-laundry', exportedAt: new Date().toISOString(), transactions: state.transactions, subscriptions: state.subscriptions, prices: state.prices, appointments: state.appointments, cost: costData, cfg: cfg }, null, 2);
     var fname = 'kanan-laundry-backup-' + todayISO() + '.json';
     var blob = new Blob([payload], { type: 'application/json' });
 
@@ -2207,10 +2522,28 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
         var newSubs = Array.isArray(data.subscriptions) ? data.subscriptions.filter(function(s){ return s && s._id && !existingSubIds[s._id]; }) : [];
         state.subscriptions = state.subscriptions.concat(newSubs);
 
+        var np = 0;
+        if(Array.isArray(data.prices)){
+          var ep = {}; state.prices.forEach(function(p){ ep[p._id] = 1; });
+          data.prices.forEach(function(p){ if(p && p._id && !ep[p._id]){ state.prices.push(p); np++; } });
+        }
+        if(Array.isArray(data.appointments)){
+          var ea = {}; state.appointments.forEach(function(a){ ea[a._id] = 1; });
+          data.appointments.forEach(function(a){ if(a && a._id && !ea[a._id]){ state.appointments.push(a); } });
+        }
+        // cost calculator + spending plan: only fill them if the user never changed the defaults
+        try{
+          if(data.cost && JSON.stringify(costData) === JSON.stringify(DEFAULT_COST)){ costData = data.cost; fillCostInputs(); computeCost(true); }
+          if(data.cfg && !cfg.cap){
+            cfg.wage = +data.cfg.wage || cfg.wage; cfg.cap = +data.cfg.cap || 0;
+            localStorage.setItem('kanan_cfg', JSON.stringify(cfg));
+            document.getElementById('cfgWage').value = cfg.wage || ''; document.getElementById('cfgCap').value = cfg.cap || '';
+          }
+        }catch(e2){}
         persist();
         renderAll();
-        toast('تم دمج ' + newTx.length + ' حركة و' + newSubs.length + ' اشتراك ✓');
-        settingsPanel.classList.remove('shown');
+        toast('تم دمج ' + newTx.length + ' حركة و' + newSubs.length + ' اشتراك' + (np ? (' و' + np + ' سعر') : '') + ' ✓');
+        closeSettings();
       }catch(err){
         toast('تعذّر قراءة الملف');
       }
@@ -2343,13 +2676,14 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
   function toggleHist(id){ openHist[id] = !openHist[id]; renderSubsList(); }
   window.toggleHist = toggleHist;
   function fmtStamp(ms){ var d=new Date(ms); return ARABIC_WEEKDAYS_SHORT[d.getDay()]+' '+fmtDate(isoFromDate(d))+' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
-  var HIST_LABEL = {scan:'مسح باركود', manual:'خصم يدوي', renew:'تجديد', edit:'تعديل', rej:'مسح مرفوض', 'new':'بداية الاشتراك'};
+  var HIST_LABEL = {scan:'مسح باركود', manual:'خصم يدوي', renew:'تجديد', edit:'تعديل', rej:'مسح مرفوض', 'new':'بداية الاشتراك', undo:'تراجع'};
   function histHTML(s){
     var h=(s.history||[]).slice().reverse();
     if(!h.length) return '<div class="hist-box"><div class="hint" style="padding:10px 0;">ما فيه سجل قبل هذا التحديث — الخصومات الجديدة تنسجل هنا.</div></div>';
-    return '<div class="hist-box">'+h.map(function(e){
+    return '<div class="hist-box">'+h.map(function(e,ix){
       var v = e.k==='rej' ? '<span class="h-bad">'+escapeHtml(e.note||'')+'</span>' : ('كان '+e.before+' ← صار <b>'+e.after+'</b>');
-      return '<div class="hist-row"><div><div class="h-k h-'+e.k+'">'+HIST_LABEL[e.k]+'</div><div class="h-t">'+fmtStamp(e.t)+'</div></div><div class="h-v">'+v+'</div></div>';
+      var ub = (ix===0 && canUndo(s,e)) ? '<div><button type="button" class="undo-btn" onclick="undoLast(\''+s._id+'\')">'+ic('undo')+' تراجع</button></div>' : '';
+      return '<div class="hist-row"><div><div class="h-k h-'+e.k+'">'+HIST_LABEL[e.k]+'</div><div class="h-t">'+fmtStamp(e.t)+'</div></div><div class="h-v">'+v+ub+'</div></div>';
     }).join('')+'</div>';
   }
   function iraqIntl(raw){
@@ -2358,16 +2692,75 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     else { d=d.replace(/^0+/,''); }
     return '964'+d;
   }
-  function renderScanLog(){
-    var card=document.getElementById('scanLogCard'), rows=[];
-    state.subscriptions.forEach(function(s){ (s.history||[]).forEach(function(e){ if(e.k==='scan'||e.k==='rej') rows.push({t:e.t,name:s.customerName,e:e}); }); });
-    rows.sort(function(a,b){ return b.t-a.t; }); rows=rows.slice(0,40);
-    if(!rows.length){ card.innerHTML='<div class="empty-state"><div class="e-emoji">🗂️</div><div class="e-txt">لا توجد عمليات مسح بعد</div></div>'; return; }
-    card.innerHTML=rows.map(function(r){
-      var ok=r.e.k==='scan';
-      return '<div class="log-row"><div><b>'+escapeHtml(r.name)+'</b><div class="h-t">'+fmtStamp(r.t)+'</div></div><span style="color:'+(ok?'var(--income)':'var(--expense)')+';font-weight:700;">'+(ok?('كان '+r.e.before+' ← صار '+r.e.after):escapeHtml(r.e.note))+'</span></div>';
-    }).join('');
+  // ---- helpers: icons / empty states ----
+  function ic(n,cls){ return '<svg class="ic'+(cls?' '+cls:'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>'; }
+  function emptyHTML(icon,txt){ return '<div class="empty-state"><span class="e-ic">'+ic(icon)+'</span><div class="e-txt">'+txt+'</div></div>'; }
+
+  // ---- undo last deduction ----
+  function canUndo(s,e){ return !!e && (e.k==='scan'||e.k==='manual') && s.remainingPieces===e.after && s.remainingPieces < s.totalPieces; }
+  function undoLast(id){
+    var s = state.subscriptions.find(function(x){ return x._id===id; }); if(!s) return;
+    var h = s.history||[], e = h[h.length-1];
+    if(!canUndo(s,e)) return;
+    if(!window.confirm('تراجع عن آخر خصم لـ «'+s.customerName+'»؟ ترجع القطعة للاشتراك.')) return;
+    var b = s.remainingPieces; s.remainingPieces = Math.min(s.totalPieces, b+1);
+    addHist(s,'undo',b,s.remainingPieces,'تراجع عن '+(e.k==='scan'?'مسح باركود':'خصم يدوي'));
+    persist(); toast('تم التراجع — متبقي '+s.remainingPieces+' لـ '+s.customerName); renderAll();
   }
+  window.undoLast = undoLast;
+
+  // ---- subscriptions log ----
+  var LOG_KINDS = {
+    scan:  {l:'مسح باركود', i:'scan',  c:'ok'},
+    manual:{l:'خصم يدوي',  i:'minus', c:'acc'},
+    rej:   {l:'مسح مرفوض', i:'alert', c:'bad'},
+    renew: {l:'تجديد',     i:'renew', c:'ok'},
+    edit:  {l:'تعديل',     i:'edit',  c:'dim'},
+    'new': {l:'اشتراك جديد', i:'plus', c:'ok'},
+    undo:  {l:'تراجع',     i:'undo',  c:'dim'}
+  };
+  var logFilter = 'all', logLimit = 40;
+  function logGroupOf(k){ return (k==='scan'||k==='manual'||k==='rej') ? k : 'other'; }
+  function dayLabel(ms){
+    var iso = isoFromDate(new Date(ms)), t = todayISO();
+    if(iso===t) return 'اليوم';
+    if(iso===isoFromDate(new Date(Date.now()-86400000))) return 'أمس';
+    return ARABIC_WEEKDAYS[new Date(ms).getDay()]+' — '+fmtDate(iso);
+  }
+  function hhmm(ms){ var d=new Date(ms); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+  function renderScanLog(){
+    var card = document.getElementById('scanLogCard'), chips = document.getElementById('logChips');
+    if(!card || !chips) return;
+    var rows = [], counts = {all:0, scan:0, manual:0, rej:0, other:0};
+    state.subscriptions.forEach(function(s){
+      var h = s.history||[];
+      h.forEach(function(e,idx){ rows.push({t:e.t, s:s, e:e, last:idx===h.length-1}); });
+    });
+    rows.sort(function(a,b){ return b.t-a.t; });
+    rows.forEach(function(r){ counts.all++; counts[logGroupOf(r.e.k)]++; });
+    var defs = [['all','الكل'],['scan','مسح'],['manual','خصم يدوي'],['rej','مرفوض'],['other','تجديد وتعديل']];
+    chips.innerHTML = defs.map(function(d){
+      return '<button type="button" class="chip'+(logFilter===d[0]?' active':'')+'" data-lf="'+d[0]+'">'+d[1]+' <i>'+counts[d[0]]+'</i></button>';
+    }).join('');
+    var vis = rows.filter(function(r){ return logFilter==='all' || logGroupOf(r.e.k)===logFilter; });
+    if(!vis.length){ card.innerHTML = emptyHTML('list', rows.length ? 'ما فيه عمليات من هذا النوع' : 'لا توجد عمليات بعد'); return; }
+    var shown = vis.slice(0, logLimit), html = '', lastDay = '';
+    shown.forEach(function(r){
+      var k = LOG_KINDS[r.e.k] || LOG_KINDS.edit, dl = dayLabel(r.t);
+      if(dl!==lastDay){ html += '<div class="lg-day">'+dl+'</div>'; lastDay = dl; }
+      var v;
+      if(r.e.k==='rej') v = '<span class="lg-bad">'+escapeHtml(r.e.note||'')+'</span>';
+      else if(r.e.k==='new') v = '<b>'+r.e.after+' قطعة</b>';
+      else v = '<b>متبقي '+r.e.after+'</b><small>كان '+r.e.before+'</small>';
+      if(r.last && canUndo(r.s, r.e)) v += '<button type="button" class="undo-btn" onclick="undoLast(\''+r.s._id+'\')">'+ic('undo')+' تراجع</button>';
+      html += '<div class="lg-row"><span class="lg-ic k-'+k.c+'">'+ic(k.i)+'</span><div class="lg-main"><b>'+escapeHtml(r.s.customerName)+'</b><small>'+k.l+' · '+hhmm(r.t)+'</small></div><div class="lg-v">'+v+'</div></div>';
+    });
+    if(vis.length > shown.length) html += '<button type="button" class="ghost more-btn" onclick="logMore()">عرض المزيد ('+(vis.length-shown.length)+')</button>';
+    card.innerHTML = html;
+  }
+  function logMore(){ logLimit += 40; renderScanLog(); }
+  window.logMore = logMore;
+
 
   // ---------------- إعدادات خطة الصرف ----------------
   var cfg = { wage: 35000, cap: 0 };
@@ -2375,7 +2768,9 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
   (function(){
     var w=document.getElementById('cfgWage'), c=document.getElementById('cfgCap'); if(!w||!c) return;
     w.value=cfg.wage||''; c.value=cfg.cap||'';
-    function sv(){ cfg.wage=+w.value||0; cfg.cap=+c.value||0; try{ localStorage.setItem('kanan_cfg',JSON.stringify(cfg)); }catch(e){} renderAll(); }
+    function save(){ cfg.wage=+w.value||0; cfg.cap=+c.value||0; try{ localStorage.setItem('kanan_cfg',JSON.stringify(cfg)); }catch(e){} }
+    function sv(){ save(); renderAll(); }
+    w.addEventListener('input',save); c.addEventListener('input',save);
     w.addEventListener('change',sv); c.addEventListener('change',sv);
   })();
   function weekInfo(){
@@ -2416,44 +2811,149 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     return {inc:inc,tot:tot,b:b,keys:keys,days:days,byDay:byDay,top:top,cut:cut,perDay:perDay,svMonth:perDay*30*cut,tgtWeek:Math.round(perDay*(1-cut)*7/5000)*5000,tgtDay:Math.round(perDay*(1-cut)/500)*500};
   }
   function buildRecs(mk){
-    var recs=[], P=computePersonal(mk), tx=mTx(mk), shop=tx.filter(isShop), shopTot=sum(shop), bk=buckets(shop), inc=P.inc;
-    function add(t,d,c){ recs.push({t:t,d:d,c:c||''}); }
+    var recs=[], P=computePersonal(mk), tx=mTx(mk), shop=tx.filter(isShop), shopTot=sum(shop), bk=buckets(shop), inc=P.inc, persL=persList(mk);
+    function add(t,d,c,x){ recs.push({t:t,d:d,c:c||'',x:x||null}); }
     var net=inc-shopTot-P.tot;
     if(inc>0&&P.tot>0){
       var pp=Math.round(P.tot/inc*100), sp=Math.round(shopTot/inc*100);
-      if(pp>30) add('الصرف الشخصي هو الثغرة الأساسية','مصروفك الشخصي '+pp+'% من الدخل ('+R(P.tot)+') بينما مصاريف المحل '+sp+'% فقط. الصافي بعد كل شي '+R(net)+'. الهدف المنطقي أن ما يتعدى الشخصي 30% من الدخل (≈ '+R(inc*.3)+').','warn');
+      if(pp>30) add('الصرف الشخصي هو الثغرة الأساسية','مصروفك الشخصي '+pp+'% من الدخل ('+R(P.tot)+') بينما مصاريف المحل '+sp+'% فقط. الصافي بعد كل شي '+R(net)+'. الهدف المنطقي أن ما يتعدى الشخصي 30% من الدخل (≈ '+R(inc*.3)+').','warn',{groups:groupBy(persL,pName),noPrint:true});
       else add('الصرف الشخصي ضمن الحدود','الشخصي '+pp+'% من الدخل، وهذا مقبول. استمر على نفس النهج.','good');
     }
     var flex=P.keys.filter(function(k){ var p=PB.filter(function(x){return x[0]===k;})[0]; return (p?p[2]:.5)>0; }).slice(0,3);
-    flex.forEach(function(k){ var p=PB.filter(function(x){return x[0]===k;})[0], r=p?p[2]:.5, cur=P.b[k]; add('قلّل «'+k+'» بنسبة '+Math.round(r*100)+'%','صرفت '+R(cur)+' ← الهدف '+R(cur*(1-r))+' (توفير '+R(cur*r)+').\n'+(TIPS[k]||''),''); });
-    if(P.top[0]&&amt(P.top[0])>=25000&&P.tot){ var o=P.top[0]; add('أكبر مصروف شخصي بحركة وحدة','«'+escapeHtml(o.description)+'» '+R(amt(o))+' بتاريخ '+fmtShortDate(o.date)+' = '+Math.round(amt(o)/P.tot*100)+'% من شهرك الشخصي. حركة وحدة ممكن تأكل سقف أسبوع كامل — اسأل نفسك قبل الدفع: هل هو ضروري هالأسبوع؟','warn'); }
+    flex.forEach(function(k){ var p=PB.filter(function(x){return x[0]===k;})[0], r=p?p[2]:.5, cur=P.b[k]; add('قلّل «'+k+'» بنسبة '+Math.round(r*100)+'%','صرفت '+R(cur)+' ← الهدف '+R(cur*(1-r))+' (توفير '+R(cur*r)+').\n'+(TIPS[k]||''),'',persL.filter(function(t){ return pName(t)===k; })); });
+    if(P.top[0]&&amt(P.top[0])>=25000&&P.tot){ var o=P.top[0]; add('أكبر مصروف شخصي بحركة وحدة','«'+escapeHtml(o.description)+'» '+R(amt(o))+' بتاريخ '+fmtShortDate(o.date)+' = '+Math.round(amt(o)/P.tot*100)+'% من شهرك الشخصي. حركة وحدة ممكن تأكل سقف أسبوع كامل — اسأل نفسك قبل الدفع: هل هو ضروري هالأسبوع؟','warn',[o]); }
     if(P.tot&&P.tgtWeek>0) add('سقف أسبوعي مقترح','لو طبقت التخفيضات، مصروفك الشخصي يصير ≈ '+R(P.tgtWeek)+' بالأسبوع (≈ '+R(P.tgtDay)+' باليوم). فعّله من الإعدادات وراح يطلع لك شريط بالرئيسية. جرّب تسحب المبلغ نقداً بظرف وإذا خلص تتوقف. التوفير المتوقع ≈ '+R(P.svMonth)+' شهرياً.','good');
     var wg=(bk['أجور العامل']||0), ad=(bk['سلف العامل']||0), dNm=(mk===currentMonthStr())?new Date().getDate():30;
-    if(cfg.wage&&(wg+ad)>0){ var due=cfg.wage*dNm/7, got=wg+ad; add('حساب زكريا','أخذ '+R(got)+' بهالشهر، والأسبوعية '+R(cfg.wage)+' تساوي ≈ '+R(due)+' للفترة ('+(got>=due?'زيادة عليها '+R(got-due):'المسجل أقل منها بـ '+R(due-got)+' — يمكن أسبوع ما انسجل')+').'+(ad?' السلف المسجلة '+R(ad)+'.':'')+' سجّل الأسبوعية بكلمة «أسبوعية زكريا» والسلف بكلمة «سلفة زكريا» حتى تنفصل وتعرف الزيادة بالضبط، وبدل ما تنسى السلف، اقطعها من الأسبوعية أو حدد سقفاً لها.',''); }
-    if(shopTot&&(bk['مشتريات كبيرة']||0)/shopTot>.15) add('مشتريات كبيرة غير متكررة','بند العباءة '+R(bk['مشتريات كبيرة'])+' ('+Math.round(bk['مشتريات كبيرة']/shopTot*100)+'% من مصاريف المحل). هذا مو مصروف اعتيادي — لا تقارن شهرك به. تأكد إنه ينرجع كربح أو استثمار.','');
-    if(shopTot&&(bk['أخرى']||0)/shopTot>.25) add('وصف المصاريف غير واضح','بند «أخرى» '+Math.round(bk['أخرى']/shopTot*100)+'% من مصاريف المحل. اكتب وصف أوضح حتى يتحسن التحليل.','');
+    if(cfg.wage&&(wg+ad)>0){ var due=cfg.wage*dNm/7, got=wg+ad; add('حساب زكريا','أخذ '+R(got)+' بهالشهر، والأسبوعية '+R(cfg.wage)+' تساوي ≈ '+R(due)+' للفترة ('+(got>=due?'زيادة عليها '+R(got-due):'المسجل أقل منها بـ '+R(due-got)+' — يمكن أسبوع ما انسجل')+').'+(ad?' السلف المسجلة '+R(ad)+'.':'')+' سجّل الأسبوعية بكلمة «أسبوعية زكريا» والسلف بكلمة «سلفة زكريا» حتى تنفصل وتعرف الزيادة بالضبط، وبدل ما تنسى السلف، اقطعها من الأسبوعية أو حدد سقفاً لها.','',shop.filter(function(t){ var b=bucketOf(t.description); return b==='أجور العامل'||b==='سلف العامل'; })); }
+    if(shopTot&&(bk['مشتريات كبيرة']||0)/shopTot>.15) add('مشتريات كبيرة غير متكررة','بند العباءة '+R(bk['مشتريات كبيرة'])+' ('+Math.round(bk['مشتريات كبيرة']/shopTot*100)+'% من مصاريف المحل). هذا مو مصروف اعتيادي — لا تقارن شهرك به. تأكد إنه ينرجع كربح أو استثمار.','',shop.filter(function(t){ return bucketOf(t.description)==='مشتريات كبيرة'; }));
+    if(shopTot&&(bk['أخرى']||0)/shopTot>.25) add('وصف المصاريف غير واضح','بند «أخرى» '+Math.round(bk['أخرى']/shopTot*100)+'% من مصاريف المحل. اكتب وصف أوضح حتى يتحسن التحليل. اضغط لتشوف الحركات وعدّل وصفها.','',shop.filter(function(t){ return bucketOf(t.description)==='أخرى'; }));
     var wd={}, wc={}; Object.keys(dailyIncomeMap()).forEach(function(d){ var g=isoToDate(d).getDay(); wd[g]=(wd[g]||0)+dailyIncomeMap()[d]; wc[g]=(wc[g]||0)+1; });
     var ks=Object.keys(wd).filter(function(g){return wc[g]>=3;}).sort(function(a,b){return wd[b]/wc[b]-wd[a]/wc[a];});
     if(ks.length>=4){ var hi=ks[0], lo=ks[ks.length-1]; add('أيام الدخل','أقوى يوم: '+ARABIC_WEEKDAYS_SHORT[hi]+' (معدل '+R(wd[hi]/wc[hi])+')، وأضعف يوم: '+ARABIC_WEEKDAYS_SHORT[lo]+' (معدل '+R(wd[lo]/wc[lo])+'). اعمل عرض أو رسالة واتساب لزبائنك قبل اليوم الضعيف.',''); }
-    var soon=state.subscriptions.filter(function(s){ return s.remainingPieces>0&&s.remainingPieces<=2||(s.expiryDate&&daysBetween(todayISO(),s.expiryDate)>=0&&daysBetween(todayISO(),s.expiryDate)<=3); }).length;
-    if(mk===currentMonthStr()&&soon) add('اشتراكات قاربت على النهاية',soon+' اشتراك باقي له قطعتين أو أقل أو ينتهي خلال 3 أيام. ذكّرهم بالواتساب حتى يجددون.','');
+    var soon=state.subscriptions.filter(function(s){ return s.remainingPieces>0&&s.remainingPieces<=2||(s.expiryDate&&daysBetween(todayISO(),s.expiryDate)>=0&&daysBetween(todayISO(),s.expiryDate)<=3); });
+    var soonN=soon.length;
+    if(mk===currentMonthStr()&&soonN) add('اشتراكات قاربت على النهاية',soonN+' اشتراك باقي له قطعتين أو أقل أو ينتهي خلال 3 أيام. ذكّرهم بالواتساب حتى يجددون.','',{n:soonN,unit:'اشتراك',html:soon.map(function(s){ return '<div class="dl dl-plain"><span class="dl-t">'+escapeHtml(s.customerName)+'</span><span class="dl-d">ينتهي '+dlDate(s.expiryDate)+'</span><b class="dl-a">'+s.remainingPieces+' قطعة</b></div>'; }).join('')});
     return recs;
   }
+  // ---------------- tap-to-see-the-expenses (drill-down) ----------------
+  var drillOpen = {}, dkPrefix = '';
+  function groupMap(list,fn){ var m={}; list.forEach(function(t){ var n=fn(t); (m[n]=m[n]||[]).push(t); }); return m; }
+  function groupBy(list,fn){ var m=groupMap(list,fn); return Object.keys(m).sort(function(a,b){ return sum(m[b])-sum(m[a]); }).map(function(n){ return {n:n,list:m[n]}; }); }
+  function persList(mk){ return mTx(mk).filter(function(t){ return t.type==='expense'&&t.category==='personal'; }); }
+  function shopList(mk){ return mTx(mk).filter(isShop); }
+  function pName(t){ return pBucket(t.description).n; }
+  function sName(t){ return bucketOf(t.description); }
+  function incTx(d){ return state.transactions.filter(function(t){ return t.type==='income'&&t.date===d; }); }
+  function dlDate(iso){ var p=iso.split('-'); return (+p[2])+'/'+(+p[1])+' '+(ARABIC_WEEKDAYS_SHORT[isoToDate(iso).getDay()]||''); }
+  function drillTxRows(list){
+    var s = list.slice().sort(function(a,b){ return a.date<b.date?1:(a.date>b.date?-1:((b.createdAt||0)-(a.createdAt||0))); });
+    return s.map(function(t){
+      return '<button type="button" class="dl" onclick="openEditTxModal(\''+t._id+'\')"><span class="dl-d">'+dlDate(t.date)+'</span><span class="dl-t">'+escapeHtml(t.description||'—')+'</span><b class="dl-a">'+R(amt(t))+'</b></button>';
+    }).join('');
+  }
+  function drillBody(spec){
+    if(!spec) return '';
+    if(spec.html) return spec.html;
+    if(spec.groups){
+      var all = 0;
+      var h = spec.groups.map(function(g){ var gt=sum(g.list); all+=gt; return '<div class="dl-grp"><span>'+escapeHtml(g.n)+'</span><b>'+R(gt)+'</b></div>'+drillTxRows(g.list); }).join('');
+      return h+'<div class="dl-sum"><span>المجموع</span><b>'+R(all)+'</b></div>';
+    }
+    var list = spec.list || spec;
+    return drillTxRows(list)+'<div class="dl-sum"><span>المجموع ('+list.length+' حركة)</span><b>'+R(sum(list))+'</b></div>';
+  }
+  function specCount(spec){
+    if(!spec) return 0;
+    if(spec.n!=null) return spec.n;
+    if(spec.groups) return spec.groups.reduce(function(a,g){ return a+g.list.length; },0);
+    return (spec.list||spec).length||0;
+  }
+  function specTxs(spec){
+    if(!spec||spec.html) return [];
+    if(spec.groups){ var o=[]; spec.groups.forEach(function(g){ o=o.concat(g.list); }); return o; }
+    return spec.list||spec;
+  }
+  function drillWrap(key,spec){ return '<div class="drill" data-for="'+escapeHtml(key)+'"'+(drillOpen[key]?'':' hidden')+'>'+drillBody(spec)+'</div>'; }
+  function rowD(label,val,cls,spec,barHTML){
+    if(!specCount(spec)) return row(label,val,cls)+(barHTML||'');
+    var key = dkPrefix+':'+label;
+    return '<button type="button" class="ins-row tap" data-dk="'+escapeHtml(key)+'" aria-expanded="'+(drillOpen[key]?'true':'false')+'"><span class="il">'+label+'</span><b class="'+(cls||'')+'">'+val+'</b>'+ic('chev','chev')+'</button>'+(barHTML||'')+drillWrap(key,spec);
+  }
+  function noteD(t,c,spec,keyIn){
+    var n = specCount(spec); if(!n) return note(t,c);
+    var key = 'n:'+(keyIn||t);
+    return '<div class="ins-note '+(c||'')+' rec"><button type="button" class="rec-top tap" data-dk="'+escapeHtml(key)+'" aria-expanded="'+(drillOpen[key]?'true':'false')+'"><span class="rec-t">'+t+'</span><span class="rec-meta">'+n+' '+((spec&&spec.unit)||'حركة')+ic('chev','chev')+'</span></button>'+drillWrap(key,spec)+'</div>';
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-dk]') : null;
+    if(!b) return;
+    var key = b.getAttribute('data-dk'), panels = b.parentNode.querySelectorAll('.drill'), panel = null;
+    for(var i=0;i<panels.length;i++){ if(panels[i].getAttribute('data-for')===key){ panel = panels[i]; break; } }
+    if(!panel) return;
+    var open = panel.hasAttribute('hidden');
+    if(open) panel.removeAttribute('hidden'); else panel.setAttribute('hidden','');
+    drillOpen[key] = open;
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  window.goReports = function(){ setTab('reports'); window.scrollTo(0,0); };
+  window.goSub = function(id){
+    var s = state.subscriptions.find(function(x){ return x._id===id; }); if(!s) return;
+    setTab('subs'); subSearchTerm = s.customerName; document.getElementById('subSearch').value = s.customerName; renderSubsList(); window.scrollTo(0,0);
+  };
+
+  // live "which item will this expense count under" preview
+  function updateCatPreview(){
+    var el = document.getElementById('catPreview'); if(!el) return;
+    var d = document.getElementById('txDesc').value.trim();
+    if(txType!=='expense' || !d){ el.innerHTML=''; el.className='cat-preview'; return; }
+    var n = txCategory==='personal' ? pBucket(d).n : bucketOf(d);
+    var unk = (n==='أخرى'||n==='متفرقة وأخرى');
+    el.className = 'cat-preview '+(unk?'warn':'ok');
+    el.innerHTML = unk ? ic('alert')+'<span>ما انعرف نوعه. اكتب وصف أوضح (مثلاً: غاز، غداء) حتى يطلع صح بالتحليل</span>'
+                       : ic('tag')+'<span>راح ينحسب تحت: <b>'+escapeHtml(n)+'</b></span>';
+  }
+
+  function prList(spec){
+    if(!spec || spec.noPrint) return '';
+    var l = specTxs(spec).slice(); if(!l.length) return '';
+    l.sort(function(a,b){ return a.date<b.date?-1:1; });
+    return '<table class="pr-list"><tbody>'+l.map(function(t){ return '<tr><td>'+fmtDate(t.date)+'</td><td>'+escapeHtml(t.description)+'</td><td>'+R(amt(t))+'</td></tr>'; }).join('')+'</tbody></table>';
+  }
+  function printByBucket(mk){
+    function block(title,groups){
+      if(!groups.length) return '';
+      return '<h2>'+title+'</h2><table class="pr-list"><thead><tr><th>التاريخ</th><th>الوصف</th><th>المبلغ</th></tr></thead><tbody>'+groups.map(function(g){
+        var l = g.list.slice().sort(function(a,b){ return a.date<b.date?-1:1; });
+        return '<tr class="pr-g"><td colspan="2">'+escapeHtml(g.n)+' ('+l.length+')</td><td>'+R(sum(l))+'</td></tr>'+l.map(function(t){ return '<tr><td>'+fmtDate(t.date)+'</td><td>'+escapeHtml(t.description)+'</td><td>'+R(amt(t))+'</td></tr>'; }).join('');
+      }).join('')+'</tbody></table>';
+    }
+    return block('المصروفات المسجلة تحت كل بند — المحل', groupBy(shopList(mk),sName)) + block('المصروفات المسجلة تحت كل بند — الشخصي', groupBy(persList(mk),pName));
+  }
+
   function dailyIncomeMap(){ var m={}; state.transactions.forEach(function(t){ if(t.type==='income'&&t.date) m[t.date]=(m[t.date]||0)+amt(t); }); return m; }
-  function recsHTML(recs){ return recs.map(function(r,i){ return '<div class="ins-note '+r.c+'" style="margin-bottom:10px;"><b>'+(i+1)+'. '+r.t+'</b><div style="margin-top:4px;white-space:pre-line;">'+r.d+'</div></div>'; }).join(''); }
+  function recsHTML(recs){
+    return recs.map(function(r,i){
+      var n = specCount(r.x), key = 'rec:'+r.t;
+      var head = n ? '<button type="button" class="rec-top tap" data-dk="'+escapeHtml(key)+'" aria-expanded="'+(drillOpen[key]?'true':'false')+'"><b>'+(i+1)+'. '+r.t+'</b><span class="rec-meta">'+n+' '+((r.x&&r.x.unit)||'حركة')+ic('chev','chev')+'</span></button>'
+                     : '<div class="rec-top"><b>'+(i+1)+'. '+r.t+'</b></div>';
+      return '<div class="ins-note '+r.c+' rec" style="margin-bottom:10px;">'+head+'<div class="rec-d">'+r.d+'</div>'+(n?drillWrap(key,r.x):'')+'</div>';
+    }).join('');
+  }
   function personalCard(mk){
     var P=computePersonal(mk); if(!P.tot) return '';
     var h=row('إجمالي الشخصي',R(P.tot)+(P.inc?' ('+Math.round(P.tot/P.inc*100)+'% من الدخل)':''))+row('معدل اليوم',R(P.perDay));
-    P.keys.forEach(function(k){ h+=row(k,R(P.b[k])+' ('+Math.round(P.b[k]/P.tot*100)+'%)')+bar(P.b[k]/P.tot*100); });
+    var pm=groupMap(persList(mk),pName); dkPrefix='pers';
+    P.keys.forEach(function(k){ h+=rowD(k,R(P.b[k])+' ('+Math.round(P.b[k]/P.tot*100)+'%)','',pm[k],bar(P.b[k]/P.tot*100)); });
     h+=note('أغلى أيام الصرف: '+P.days.map(function(d){return fmtShortDate(d)+' ('+R(P.byDay[d])+')';}).join(' · '));
     return card('وين يروح مصروفك الشخصي',h);
   }
   function analysisPrint(mk){
     var recs=buildRecs(mk), P=computePersonal(mk), tx=mTx(mk), shop=tx.filter(isShop), shopTot=sum(shop), bk=buckets(shop), inc=P.inc;
-    var h='<h2>التحليل والتوصيات</h2>'+recs.map(function(r,i){ return '<div class="pr-rec '+r.c+'"><b>'+(i+1)+'. '+r.t+'</b><div style="white-space:pre-line">'+r.d+'</div></div>'; }).join('');
+    var h='<h2>التحليل والتوصيات</h2>'+recs.map(function(r,i){ var pl=prList(r.x); return '<div class="pr-rec '+r.c+(pl?' has-list':'')+'"><b>'+(i+1)+'. '+r.t+'</b><div style="white-space:pre-line">'+r.d+'</div>'+pl+'</div>'; }).join('');
     function tbl(title,obj,tot,extra){ var ks=Object.keys(obj).sort(function(a,b){return obj[b]-obj[a];}); return '<h2>'+title+'</h2><table><thead><tr><th>البند</th><th>المبلغ</th><th>النسبة</th><th style="width:30%"></th>'+(extra?'<th>الهدف</th>':'')+'</tr></thead><tbody>'+ks.map(function(k){ var p=tot?Math.round(obj[k]/tot*100):0, r=0; if(extra){ var q=PB.filter(function(x){return x[0]===k;})[0]; r=q?q[2]:(k==='متفرقة وأخرى'?.5:0); } return '<tr><td>'+k+'</td><td>'+R(obj[k])+'</td><td>'+p+'%</td><td><div class="pr-bar"><i style="width:'+p+'%"></i></div></td>'+(extra?'<td>'+(r?R(obj[k]*(1-r)):'ثابت')+'</td>':'')+'</tr>'; }).join('')+'</tbody></table>'; }
     h+=tbl('هيكل مصاريف المحل',bk,shopTot,false);
     if(P.tot) h+=tbl('أين يذهب المصروف الشخصي وخطة التخفيض',P.b,P.tot,true)+'<div class="pr-rec good"><b>الخطة:</b> مصروفك الشخصي الحالي '+R(P.perDay*30)+' شهرياً ← الهدف '+R(P.perDay*30*(1-P.cut))+' (توفير ≈ '+R(P.svMonth)+'). السقف الأسبوعي المقترح '+R(P.tgtWeek)+'.</div>';
+    h+=printByBucket(mk);
     return h;
   }
 
@@ -2485,13 +2985,13 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var tx=mTx(mk), inc=sum(tx,function(t){return t.type==='income';});
     var shop=tx.filter(isShop), shopTot=sum(shop), pers=sum(tx,function(t){return t.type==='expense'&&t.category==='personal';});
     var bk=buckets(shop), keys=Object.keys(bk).sort(function(a,b){return bk[b]-bk[a];});
-    var cd=costData||{}, cpp=(typeof lastCostPerPiece==='number')?lastCostPerPiece:0;
+    var sg=groupMap(shop,sName), cd=costData||{}, cpp=(typeof lastCostPerPiece==='number')?lastCostPerPiece:0;
 
     // 1) هيكل التكلفة
     var h1='';
     if(!shopTot){ h1=note('ما فيه مصاريف محل مسجلة بهذا الشهر.'); }
     else {
-      keys.forEach(function(k){ h1+=row(k,R(bk[k])+' ('+Math.round(bk[k]/shopTot*100)+'%)')+bar(bk[k]/shopTot*100); });
+      dkPrefix='cost'; keys.forEach(function(k){ h1+=rowD(k,R(bk[k])+' ('+Math.round(bk[k]/shopTot*100)+'%)','',sg[k],bar(bk[k]/shopTot*100)); });
       var ratio=inc>0?Math.round(shopTot/inc*100):null;
       h1+=note('أكبر بند: <b>'+keys[0]+'</b>. '+(ratio===null?'ما فيه دخل مسجل للمقارنة.':'مصاريف المحل تساوي '+ratio+'% من الدخل.'), ratio>70?'warn':'');
       if(ratio>70) alerts.push('مصاريف المحل أكلت '+ratio+'% من الدخل');
@@ -2504,14 +3004,14 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       var d=t.description||'';
       if(d.indexOf('اشتراك')===0||d.indexOf('تجديد')===0){ subInc+=amt(t); return; }
       var parts=d.split('،'), hit=false;
-      parts.forEach(function(p){ var m=p.trim().match(/^(.+)×(\d+)$/); if(!m) return; var pr=state.prices.find(function(x){return x.name===m[1].trim();}); if(!pr) return; hit=true; var o=svc[pr.name]||(svc[pr.name]={q:0,rev:0,price:pr.price}); o.q+=+m[2]; o.rev+=pr.price*(+m[2]); });
+      parts.forEach(function(p){ var m=p.trim().match(/^(.+)×(\d+)$/); if(!m) return; var pr=state.prices.find(function(x){return x.name===m[1].trim();}); if(!pr) return; hit=true; var o=svc[pr.name]||(svc[pr.name]={q:0,rev:0,price:pr.price,txs:[]}); o.q+=+m[2]; o.rev+=pr.price*(+m[2]); if(o.txs.indexOf(t)<0) o.txs.push(t); });
       if(!hit) lump+=amt(t);
     });
     var sk=Object.keys(svc).sort(function(a,b){return svc[b].rev-svc[a].rev;}), h2='';
     if(!sk.length){ h2=note('يتفعّل لما يتسجل الدخل بالتفصيل (قميص×2…). مؤجل لحد ما يصير التسجيل كله بالبرنامج.'); }
     else {
       if(!cpp) h2+=note('احسب تكلفة القطعة من الإعدادات حتى يطلع الهامش.','warn');
-      sk.forEach(function(k){ var o=svc[k], m=o.price-cpp; h2+=row(k+' ('+o.q+' قطعة)', cpp?(R(m)+' / قطعة'):R(o.rev), cpp?(m<0?'neg':'pos'):'')+(cpp&&m<0?'<div class="h-bad" style="font-size:12px">تخسر على هذي الخدمة — السعر أقل من التكلفة</div>':''); });
+      dkPrefix='svc'; sk.forEach(function(k){ var o=svc[k], m=o.price-cpp; h2+=rowD(k+' ('+o.q+' قطعة)', cpp?(R(m)+' / قطعة'):R(o.rev), cpp?(m<0?'neg':'pos'):'', o.txs, (cpp&&m<0?'<div class="h-bad" style="font-size:12px">تخسر على هذي الخدمة — السعر أقل من التكلفة</div>':'')); });
       if(cpp) h2+=note('الهامش = سعر الخدمة − متوسط تكلفة القطعة ('+R(cpp)+' د.ع). التكلفة متوسط للمحل كله.');
     }
     if(sk.length&&(lump||subInc)) h2+=row('دخل بدون تفصيل خدمة',R(lump))+row('دخل اشتراكات',R(subInc));
@@ -2521,11 +3021,11 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var h3='', cashNow=inc-shopTot-pers;
     if(isCur){
       var dN=new Date().getDate(), dim=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate(), rem=dim-dN;
-      var avgInc=dN?inc/dN:0, fixedPaid=0, fixedLeft=0;
-      Object.keys(FIXED_MAP).forEach(function(b){ var paid=(bk[b]||0)+(b==='أجور العامل'?(bk['سلف العامل']||0):0), exp=(b==='أجور العامل'&&cfg.wage)?cfg.wage*4.33:(+cd[FIXED_MAP[b]]||0); fixedPaid+=paid; fixedLeft+=Math.max(0,exp-paid); });
+      var avgInc=dN?inc/dN:0, fixedPaid=0, fixedLeft=0, fixedDet='';
+      Object.keys(FIXED_MAP).forEach(function(b){ var paid=(bk[b]||0)+(b==='أجور العامل'?(bk['سلف العامل']||0):0), exp=(b==='أجور العامل'&&cfg.wage)?cfg.wage*4.33:(+cd[FIXED_MAP[b]]||0); fixedPaid+=paid; fixedLeft+=Math.max(0,exp-paid); if(exp>0) fixedDet+='<div class="dl-grp"><span>'+b+'</span><b>باقي '+R(Math.max(0,exp-paid))+'</b></div><div class="dl-note">المتوقع '+R(exp)+' · المسجل '+R(paid)+'</div>'; });
       var varAvg=dN?Math.max(0,shopTot-fixedPaid)/dN:0;
       var endBal=cashNow+avgInc*rem-fixedLeft-varAvg*rem;
-      h3=row('الصافي الفعلي لحد اليوم',R(cashNow),cashNow<0?'neg':'pos')+row('دخل متوقع للأيام الباقية ('+rem+' يوم)',R(avgInc*rem))+row('التزامات ثابتة ما انسجلت بعد',R(fixedLeft))+row('مصاريف متغيرة متوقعة',R(varAvg*rem))+row('الصافي المتوقع نهاية الشهر',R(endBal),endBal<0?'neg':'pos');
+      dkPrefix='cash'; h3=rowD('الصافي الفعلي لحد اليوم',R(cashNow),cashNow<0?'neg':'pos',{n:3,html:'<div class="dl-grp"><span>الدخل</span><b>'+R(inc)+'</b></div><div class="dl-grp"><span>مصاريف المحل</span><b>−'+R(shopTot)+'</b></div><div class="dl-grp"><span>مصروف شخصي</span><b>−'+R(pers)+'</b></div>'})+row('دخل متوقع للأيام الباقية ('+rem+' يوم)',R(avgInc*rem))+rowD('التزامات ثابتة ما انسجلت بعد',R(fixedLeft),'',fixedDet?{n:1,html:fixedDet}:null)+row('مصاريف متغيرة متوقعة',R(varAvg*rem))+row('الصافي المتوقع نهاية الشهر',R(endBal),endBal<0?'neg':'pos');
       if(fixedLeft>0&&cashNow<fixedLeft){ h3+=note('السيولة الحالية ('+R(cashNow)+') ما تغطي الالتزامات الباقية ('+R(fixedLeft)+'). جهّز المبلغ قبل موعد الدفع.','warn'); alerts.push('السيولة ما تكفي الالتزامات الثابتة الباقية'); }
       else if(endBal<0){ h3+=note('بهالمعدل راح تنهي الشهر بالسالب.','warn'); alerts.push('التوقع: الشهر ينتهي بالسالب'); }
       else h3+=note('الوضع النقدي مطمّن بهالمعدل.','good');
@@ -2539,30 +3039,30 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var fl=[];
     if(hist.length>=7){
       var mean=hist.reduce(function(a,b){return a+b;},0)/hist.length, sd=Math.sqrt(hist.reduce(function(a,b){return a+(b-mean)*(b-mean);},0)/hist.length);
-      Object.keys(daily).filter(function(d){return d.indexOf(mk)===0;}).sort().forEach(function(d){ if(daily[d]<mean-1.5*sd&&daily[d]<mean*.5) fl.push('دخل يوم '+fmtShortDate(d)+' ضعيف ('+R(daily[d])+' مقابل معدل '+R(mean)+')'); else if(daily[d]>mean+2*sd) fl.push('دخل يوم '+fmtShortDate(d)+' أعلى من المعتاد ('+R(daily[d])+')'); });
+      Object.keys(daily).filter(function(d){return d.indexOf(mk)===0;}).sort().forEach(function(d){ if(daily[d]<mean-1.5*sd&&daily[d]<mean*.5) fl.push({t:'دخل يوم '+fmtShortDate(d)+' ضعيف ('+R(daily[d])+' مقابل معدل '+R(mean)+')',x:incTx(d)}); else if(daily[d]>mean+2*sd) fl.push({t:'دخل يوم '+fmtShortDate(d)+' أعلى من المعتاد ('+R(daily[d])+')',x:incTx(d)}); });
     }
     var prev=[1,2,3].map(function(n){return mTx(monthShift(mk,n)).filter(isShop);}), seen={};
     shop.forEach(function(t){
       var b=bucketOf(t.description), vals=[]; prev.forEach(function(l){ l.forEach(function(x){ if(bucketOf(x.description)===b) vals.push(amt(x)); }); });
-      if(vals.length>=2){ var av=vals.reduce(function(a,c){return a+c;},0)/vals.length; if(amt(t)>av*2&&amt(t)-av>5000) fl.push('مصروف «'+escapeHtml(t.description)+'» ('+R(amt(t))+') أعلى من ضعف معدل بند '+b); }
-      var key=t.date+'|'+(t.description||'')+'|'+amt(t); if(seen[key]&&amt(t)>=10000) fl.push('احتمال تكرار: «'+escapeHtml(t.description)+'» بنفس اليوم والمبلغ'); seen[key]=1;
+      if(vals.length>=2){ var av=vals.reduce(function(a,c){return a+c;},0)/vals.length; if(amt(t)>av*2&&amt(t)-av>5000) fl.push({t:'مصروف «'+escapeHtml(t.description)+'» ('+R(amt(t))+') أعلى من ضعف معدل بند '+b,x:[t]}); }
+      var key=t.date+'|'+(t.description||'')+'|'+amt(t); if(seen[key]&&amt(t)>=10000) fl.push({t:'احتمال تكرار: «'+escapeHtml(t.description)+'» بنفس اليوم والمبلغ',x:[seen[key],t]}); seen[key]=t;
     });
-    if(isCur){ var d0=0; for(var i=1;i<=new Date().getDate();i++){ var ds=mk+'-'+String(i).padStart(2,'0'); if(!daily[ds]) d0++; } if(d0>=5) fl.push(d0+' أيام بهذا الشهر بدون أي دخل مسجل'); }
-    fl=fl.slice(0,5); fl.forEach(function(f){ alerts.push(f); });
-    out.push(card('رصد الانحرافات',fl.length?fl.map(function(f){return note(f,'warn');}).join(''):note(hist.length<7?'أحتاج 7 أيام دخل على الأقل حتى أعرف المعدل الطبيعي.':'ما لقيت شي غريب بهذا الشهر.','good')));
+    if(isCur){ var d0=0, zd=[]; for(var i=1;i<=new Date().getDate();i++){ var ds=mk+'-'+String(i).padStart(2,'0'); if(!daily[ds]){ d0++; zd.push(ds); } } if(d0>=5) fl.push({t:d0+' أيام بهذا الشهر بدون أي دخل مسجل',x:{n:d0,unit:'يوم',html:zd.map(function(z){ return '<div class="dl dl-plain"><span class="dl-d">'+dlDate(z)+'</span><span class="dl-t">بدون دخل مسجل</span></div>'; }).join('')}}); }
+    fl=fl.slice(0,5); fl.forEach(function(f){ alerts.push(f.t); });
+    out.push(card('رصد الانحرافات',fl.length?fl.map(function(f){return noteD(f.t,'warn',f.x);}).join(''):note(hist.length<7?'أحتاج 7 أيام دخل على الأقل حتى أعرف المعدل الطبيعي.':'ما لقيت شي غريب بهذا الشهر.','good')));
 
     // 5) عائد التسويق
     var ads=state.transactions.filter(function(t){return isShop(t)&&bucketOf(t.description)==='تسويق'&&t.date;}).sort(function(a,b){return a.date<b.date?1:-1;}).slice(0,4), h5='';
     function incBetween(a,b){ return sum(state.transactions,function(t){return t.type==='income'&&t.date>=a&&t.date<b;}); }
     function shiftIso(iso,n){ var d=isoToDate(iso); d.setDate(d.getDate()+n); return isoFromDate(d); }
-    if(!ads.length) h5=note('ما فيه إعلانات مسجلة. سجّل مصروف الإعلان وبوصفه كلمة «إعلان» أو «دعاية» حتى أقيس عائده.');
+    dkPrefix='roi'; if(!ads.length) h5=note('ما فيه إعلانات مسجلة. سجّل مصروف الإعلان وبوصفه كلمة «إعلان» أو «دعاية» حتى أقيس عائده.');
     else ads.forEach(function(a){
       var end=shiftIso(a.date,14);
-      if(end>today){ h5+=row('«'+escapeHtml(a.description)+'» ('+R(amt(a))+')','التقييم بعد '+daysBetween(today,end)+' يوم'); return; }
+      if(end>today){ h5+=rowD('«'+escapeHtml(a.description)+'» ('+R(amt(a))+')','التقييم بعد '+daysBetween(today,end)+' يوم','',[a]); return; }
       var before=incBetween(shiftIso(a.date,-14),a.date), after=incBetween(a.date,end), extra=after-before, roi=Math.round((extra-amt(a))/amt(a)*100);
-      if(before===0){ h5+=row('«'+escapeHtml(a.description)+'» ('+R(amt(a))+')','ما فيه دخل قبله للمقارنة'); return; }
+      if(before===0){ h5+=rowD('«'+escapeHtml(a.description)+'» ('+R(amt(a))+')','ما فيه دخل قبله للمقارنة','',[a]); return; }
       var ns=state.subscriptions.filter(function(s){var d=new Date(s.createdAt||0); var iso=isoFromDate(d); return iso>=a.date&&iso<end;}).length;
-      h5+=row('«'+escapeHtml(a.description)+'» ('+R(amt(a))+')','العائد '+roi+'%',roi>=0?'pos':'neg')+'<div class="h-t">دخل 14 يوم قبل: '+R(before)+' · بعد: '+R(after)+' · اشتراكات جديدة: '+ns+'</div>';
+      h5+=rowD('«'+escapeHtml(a.description)+'» ('+R(amt(a))+')','العائد '+roi+'%',roi>=0?'pos':'neg',[a],'<div class="h-t">دخل 14 يوم قبل: '+R(before)+' · بعد: '+R(after)+' · اشتراكات جديدة: '+ns+'</div>');
     });
     out.push(card('عائد الإنفاق التسويقي',h5));
 
@@ -2571,7 +3071,8 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     if(!pm.length) h6=note('أحتاج شهر واحد كامل من البيانات على الأقل حتى أقترح ميزانية.');
     else {
       var avgB={}; pm.forEach(function(l){ var b=buckets(l.filter(isShop)); Object.keys(b).forEach(function(k){ avgB[k]=(avgB[k]||0)+b[k]/pm.length; }); });
-      Object.keys(avgB).sort(function(a,b){return avgB[b]-avgB[a];}).slice(0,6).forEach(function(k){ var lim=Math.round(avgB[k]*1.05/1000)*1000, sp=bk[k]||0; h6+=row(k+' — الحد المقترح '+R(lim),R(sp)+' صُرف',sp>lim?'neg':'')+bar(lim?sp/lim*100:0,sp>lim); });
+      dkPrefix='bud';
+      Object.keys(avgB).sort(function(a,b){return avgB[b]-avgB[a];}).slice(0,6).forEach(function(k){ var lim=Math.round(avgB[k]*1.05/1000)*1000, sp=bk[k]||0; h6+=rowD(k+' — الحد المقترح '+R(lim),R(sp)+' صُرف',sp>lim?'neg':'',sg[k],bar(lim?sp/lim*100:0,sp>lim)); });
       var avgNet=pm.reduce(function(a,l){return a+sum(l,function(t){return t.type==='income';})-sum(l,function(t){return t.type==='expense';});},0)/pm.length;
       var save=Math.max(0,Math.round(avgNet*.15/5000)*5000), fixedM=(+cd.rent||0)+(cfg.wage?cfg.wage*4.33:(+cd.worker||0))+(+cd.water||0)+(+cd.electricity||0)+(+cd.maintenance||0);
       h6+=note(avgNet>0?('معدل صافيك الشهري '+R(avgNet)+'. ادّخر <b>'+R(save)+'</b> كل شهر (15%).'):'صافيك الشهري بالسالب أو صفر — قلّل أكبر بند صرف أولاً.',avgNet>0?'good':'warn');
@@ -2584,14 +3085,14 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var w=document.getElementById('insightsWrap'); if(!w) return;
     var mk=(reportMode==='month')?(document.getElementById('reportMonth').value||currentMonthStr()):currentMonthStr();
     var r=computeInsights(mk);
-    w.innerHTML='<div class="ins-head">المحلل الذكي</div><div class="ins-sub">يحلل بياناتك على جهازك — بدون إنترنت ('+mk+')</div>'+card('التوصيات',recsHTML(buildRecs(mk)))+personalCard(mk)+r.cards.join('');
+    w.innerHTML='<div class="ins-head">المحلل الذكي</div><div class="ins-sub">يحلل بياناتك على جهازك بدون إنترنت — '+(reportMode==='month'?fmtMonthLabel(mk):'الشهر الحالي ('+fmtMonthLabel(mk)+')')+'. اضغط على أي بند تشوف المصاريف اللي تحته.</div>'+card('التوصيات',recsHTML(buildRecs(mk)))+personalCard(mk)+r.cards.join('');
   }
   function renderDashInsight(){
     var w=document.getElementById('dashInsight'); if(!w) return;
     var a=computeInsights(currentMonthStr()).alerts.slice(0,2);
     var capH='';
     if(cfg.cap>0){ var wi=weekInfo(), pc=wi.spent/cfg.cap*100; capH='<div class="cap-card"><div class="ins-row"><b>سقف مصروفك الشخصي بهالأسبوع</b><span>'+R(wi.spent)+' / '+R(cfg.cap)+'</span></div>'+bar(pc,wi.left<0)+'<div class="h-t">'+(wi.left>=0?('باقي '+R(wi.left)+' ≈ '+R(wi.left/Math.max(1,wi.daysLeft))+' لكل يوم من الأيام الباقية'):('تجاوزت السقف بـ '+R(-wi.left)+' — وقف المصاريف غير الضرورية لنهاية الأسبوع'))+'</div></div>'; }
-    w.innerHTML=capH+a.map(function(x){ return '<div class="dash-alert">'+x+'</div>'; }).join('');
+    w.innerHTML=capH+a.map(function(x){ return '<div class="dash-alert" onclick="goReports()">'+x+'</div>'; }).join('');
   }
 
   function renderAll(){
@@ -2626,14 +3127,14 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     }).slice(0,6);
     var box = document.getElementById('attentionList');
     if(!attn.length){
-      box.innerHTML = '<div class="empty-state"><div class="e-emoji">✅</div><div class="e-txt">لا توجد اشتراكات تحتاج انتباه الآن</div></div>';
+      box.innerHTML = emptyHTML('check','لا توجد اشتراكات تحتاج انتباه الآن');
     } else {
       box.innerHTML = attn.map(function(s){
         var d = daysBetween(t, s.expiryDate);
         var badge = d<0 ? '<span class="badge bad">منتهي</span>' :
                     d<=3 ? '<span class="badge warn">ينتهي خلال '+d+' يوم</span>' :
                     '<span class="badge bad">قطع قليلة</span>';
-        return '<div class="mini-row"><div><div class="name">'+s.customerName+'</div><div class="meta">'+s.packageName+' · متبقي '+s.remainingPieces+'/'+s.totalPieces+'</div></div>'+badge+'</div>';
+        return '<div class="mini-row" onclick="goSub(\''+s._id+'\')"><div><div class="name">'+escapeHtml(s.customerName)+'</div><div class="meta">'+escapeHtml(s.packageName)+' · متبقي '+s.remainingPieces+'/'+s.totalPieces+'</div></div>'+badge+'</div>';
       }).join('');
     }
   }
@@ -2659,7 +3160,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     }
 
     if(!source.length){
-      list.innerHTML = '<div class="empty-state"><div class="e-emoji">'+(txSearchTerm?'🔍':'🧾')+'</div><div class="e-txt">'+(txSearchTerm?'ما لكيت نتائج مطابقة':'لا توجد حركات مسجلة بعد')+'</div></div>';
+      list.innerHTML = emptyHTML(txSearchTerm?'search':'list', txSearchTerm?'ما لكيت نتائج مطابقة':'لا توجد حركات مسجلة بعد');
       return;
     }
     var groups = {};
@@ -2673,7 +3174,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       var rows = groups[date].map(function(tx){
         var sign = tx.type==='income' ? '+' : '−';
         var iconClass = tx.type==='income' ? 'income' : (tx.category==='personal' ? 'personal' : 'expense');
-        var tag = tx.type==='expense' ? (tx.category==='personal' ? '<div class="tx-tag">شخصي</div>' : '<div class="tx-tag">مصروف المحل</div>') : '';
+        var tag = tx.type==='expense' ? (tx.category==='personal' ? '<div class="tx-tag">شخصي · '+escapeHtml(pName(tx))+'</div>' : '<div class="tx-tag">مصروف المحل · '+escapeHtml(sName(tx))+'</div>') : '';
         return '<div class="tx-row" onclick="openEditTxModal(\''+tx._id+'\')">'+
           '<div class="tx-icon '+iconClass+'">'+(tx.type==='income'?'↓':'↑')+'</div>'+
           '<div class="tx-body"><div class="tx-desc">'+escapeHtml(tx.description)+'</div>'+tag+'</div>'+
@@ -2693,34 +3194,36 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       return s.customerName.toLowerCase().indexOf(subSearchTerm.toLowerCase()) !== -1;
     });
     if(!state.subscriptions.length){
-      list.innerHTML = '<div class="empty-state"><div class="e-emoji">📇</div><div class="e-txt">لا توجد اشتراكات بعد</div></div>';
+      list.innerHTML = emptyHTML('inbox','لا توجد اشتراكات بعد');
       return;
     }
     if(!filtered.length){
-      list.innerHTML = '<div class="empty-state"><div class="e-emoji">🔍</div><div class="e-txt">ما لكيت زبون بهذا الاسم</div></div>';
+      list.innerHTML = emptyHTML('search','ما لكيت زبون بهذا الاسم');
       return;
     }
     var sorted = filtered.slice().sort(function(a,b){ return a.expiryDate < b.expiryDate ? -1 : 1; });
+    function tool(icon,label,call,extra){ return '<button type="button" class="tool" '+(extra||'')+' onclick="'+call+'">'+ic(icon)+'<span>'+label+'</span></button>'; }
     list.innerHTML = sorted.map(function(s){
       var d = daysBetween(t, s.expiryDate);
       var pct = Math.max(0, Math.min(100, Math.round((s.remainingPieces/s.totalPieces)*100)));
       var badge = d<0 ? '<span class="badge bad">منتهي</span>' : d<=3 ? '<span class="badge warn">ينتهي قريباً</span>' : '<span class="badge ok">نشط</span>';
       var canUse = d>=0 && s.remainingPieces>0;
+      var id = s._id;
       return '<div class="sub-card">'+
         '<div class="sub-top"><div><div class="sub-name">'+escapeHtml(s.customerName)+'</div><div class="sub-pkg">'+escapeHtml(s.packageName)+'</div></div>'+badge+'</div>'+
         '<div class="prog-wrap"><div class="prog-track"><div class="prog-fill" style="width:'+pct+'%"></div></div>'+
           '<div class="prog-txt"><span>متبقي '+s.remainingPieces+' من '+s.totalPieces+'</span><span>ينتهي '+fmtDate(s.expiryDate)+'</span></div></div>'+
-        '<div class="sub-foot"><span class="barcode-num">#'+s.barcode+'</span>'+
-          '<div class="sub-actions"><button class="ghost" onclick="toggleBarcode(\''+s._id+'\')">عرض الباركود</button>'+
-          '<button class="ghost" onclick="deleteSub(\''+s._id+'\')">حذف</button></div></div>'+
-        '<div class="barcode-box" id="bc-'+s._id+'"><svg></svg></div>'+(openHist[s._id]?histHTML(s):'')+
-        '<div class="sub-actions2">'+
-          '<button class="ghost" onclick="openSubModal(\''+s._id+'\',\'edit\')">✏️ تعديل</button>'+
-          '<button class="ghost" onclick="openSubModal(\''+s._id+'\',\'renew\')">🔄 تجديد</button>'+
-          '<button class="ghost" onclick="toggleHist(\''+s._id+'\')">🕘 السجل</button>'+'<button class="ghost" onclick="printSubCard(\''+s._id+'\')">🖨️ طباعة</button>'+
-          (s.phone ? '<button class="ghost" onclick="openWhatsappReminder(\''+s._id+'\')">📲 واتساب</button>' : '')+
+        '<div class="sub-foot"><span class="barcode-num">#'+s.barcode+'</span></div>'+
+        '<button type="button" class="piece-btn" onclick="usePieceDirect(\''+id+'\')" '+(canUse?'':'disabled')+'>'+ic('minus')+' خصم قطعة يدوياً</button>'+
+        '<div class="sub-tools">'+
+          tool('scan','الباركود','toggleBarcode(\''+id+'\')','data-bcbtn="'+id+'" aria-expanded="false"')+
+          tool('clock','السجل','toggleHist(\''+id+'\')','aria-expanded="'+(openHist[id]?'true':'false')+'"')+
+          tool('edit','تعديل','openSubModal(\''+id+'\',\'edit\')')+
+          tool('renew','تجديد','openSubModal(\''+id+'\',\'renew\')')+
+          tool('printer','طباعة','printSubCard(\''+id+'\')')+
+          (s.phone ? tool('chat','واتساب','openWhatsappReminder(\''+id+'\')') : '')+
         '</div>'+
-        '<button class="piece-btn" onclick="usePieceDirect(\''+s._id+'\')" '+(canUse?'':'disabled')+'>➖ خصم قطعة يدوياً (بدون باركود)</button>'+
+        '<div class="barcode-box" id="bc-'+id+'"><svg></svg></div>'+(openHist[id]?histHTML(s):'')+
       '</div>';
     }).join('');
   }
@@ -2783,7 +3286,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
 
     if(!keys.length){
       hlWrap.innerHTML = '';
-      barsWrap.innerHTML = '<div class="empty-state"><div class="e-emoji">📊</div><div class="e-txt">لا توجد بيانات لهذه الفترة</div></div>';
+      barsWrap.innerHTML = emptyHTML('chart','لا توجد بيانات لهذه الفترة');
       return;
     }
     keys.sort(function(a,b){ return bucket[b]-bucket[a]; });
@@ -2817,7 +3320,7 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
     var eKeys = Object.keys(allKeys);
 
     if(!eKeys.length){
-      expBarsWrap.innerHTML = '<div class="empty-state"><div class="e-emoji">📊</div><div class="e-txt">لا توجد مصروفات لهذه الفترة</div></div>';
+      expBarsWrap.innerHTML = emptyHTML('chart','لا توجد مصروفات لهذه الفترة');
     } else {
       var totals = {};
       eKeys.forEach(function(k){ totals[k] = (shopBucket[k]||0) + (personalBucket[k]||0); });
@@ -2835,23 +3338,35 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       }).join('');
     }
 
+    renderExpenseList(expenseTxList);
+  }
+
+  var expView = 'day', expFilter = 'all';
+  function renderExpenseList(all){
     var listWrap = document.getElementById('expenseDetailList');
-    if(!expenseTxList.length){
-      listWrap.innerHTML = '<div class="empty-state"><div class="e-emoji">🧾</div><div class="e-txt">لا توجد مصروفات مسجلة لهذه الفترة</div></div>';
+    var list = (all||[]).filter(function(t){ return expFilter==='all' || (expFilter==='personal' ? t.category==='personal' : t.category!=='personal'); });
+    if(!list.length){ listWrap.innerHTML = emptyHTML('list', 'لا توجد مصروفات مسجلة لهذه الفترة'); return; }
+    if(expView==='bucket'){
+      var tot = sum(list);
+      var gs = groupBy(list, function(t){ return (t.category==='personal'?'p|':'s|')+(t.category==='personal'?pName(t):sName(t)); });
+      listWrap.innerHTML = '<div class="card">'+gs.map(function(g){
+        var parts = g.n.split('|'), scope = parts[0]==='p' ? 'شخصي' : 'المحل', name = parts[1];
+        var gt = sum(g.list), pct = tot ? Math.round(gt/tot*100) : 0, key = 'ex:'+g.n;
+        return '<div class="eg"><button type="button" class="eg-btn tap" data-dk="'+escapeHtml(key)+'" aria-expanded="'+(drillOpen[key]?'true':'false')+'"><span class="eg-main"><b>'+escapeHtml(name)+'</b><small>'+scope+' · '+g.list.length+' حركة</small></span><span class="eg-val"><b>'+R(gt)+'</b><small>'+pct+'%</small></span>'+ic('chev','chev')+'</button>'+bar(pct)+drillWrap(key,{list:g.list})+'</div>';
+      }).join('')+'</div>';
       return;
     }
-    var groups = {};
-    var order = [];
-    expenseTxList.forEach(function(tx){
+    var groups = {}, order = [];
+    list.forEach(function(tx){
       if(!groups[tx.date]){ groups[tx.date]=[]; order.push(tx.date); }
       groups[tx.date].push(tx);
     });
     order.sort().reverse();
     listWrap.innerHTML = order.map(function(date){
-      var dayTotal = groups[date].reduce(function(a,tx){ return a+(Number(tx.amount)||0); }, 0);
+      var dayTotal = sum(groups[date]);
       var rows = groups[date].map(function(tx){
         var iconClass = tx.category==='personal' ? 'personal' : 'expense';
-        var tag = tx.category==='personal' ? '<div class="tx-tag">شخصي</div>' : '<div class="tx-tag">مصروف المحل</div>';
+        var tag = tx.category==='personal' ? '<div class="tx-tag">شخصي · '+escapeHtml(pName(tx))+'</div>' : '<div class="tx-tag">مصروف المحل · '+escapeHtml(sName(tx))+'</div>';
         return '<div class="tx-row" onclick="openEditTxModal(\''+tx._id+'\')">'+
           '<div class="tx-icon '+iconClass+'">↑</div>'+
           '<div class="tx-body"><div class="tx-desc">'+escapeHtml(tx.description)+'</div>'+tag+'</div>'+
@@ -2916,6 +3431,50 @@ header.top::after{ background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rg
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
   }
+
+  // ---------------- v5 init ----------------
+  function refreshSettingsSummaries(){
+    if(typeof cfg === 'undefined' || !cfg) return; // called during early init, before the plan settings exist
+    function set(id,t){ var e=document.getElementById(id); if(e) e.textContent=t; }
+    set('sumPrices', state.prices.length ? (state.prices.length+' قطعة بالقائمة') : 'ما أضفت أسعار بعد');
+    set('sumPlan', cfg.cap>0 ? ('سقف أسبوعي '+R(cfg.cap)+' د.ع') : 'السقف غير مفعّل');
+    set('sumCost', lastCostPerPiece>0 ? ('تكلفة القطعة ≈ '+R(lastCostPerPiece)+' د.ع') : 'اضغط احسب لتظهر التكلفة');
+    set('sumPkg', 'شوف إذا خصم الباقة آمن لو لا');
+    var le=null; try{ le=localStorage.getItem(LS_LAST_EXPORT); }catch(e){}
+    set('sumBackup', le ? ('آخر نسخة: '+fmtDate(le)) : 'ما سويت نسخة بعد');
+    var mn={light:'فاتح',dark:'داكن',auto:'تلقائي'};
+    set('sumLook', (mn[curMode]||'فاتح')+' · '+((THEMES[curTheme]||THEMES.blue).name));
+  }
+  // link every label to its input (tap label = focus field, screen readers)
+  document.querySelectorAll('.field, .cost-field').forEach(function(f){
+    var l=f.querySelector('label'), i=f.querySelector('input,select,textarea');
+    if(l && i && i.id && !l.getAttribute('for')) l.setAttribute('for', i.id);
+  });
+  document.getElementById('txDesc').addEventListener('input', updateCatPreview);
+
+  document.getElementById('logChips').addEventListener('click', function(e){
+    var b = e.target.closest('[data-lf]'); if(!b) return;
+    logFilter = b.getAttribute('data-lf'); logLimit = 40; renderScanLog();
+  });
+  document.getElementById('expViewSeg').addEventListener('click', function(e){
+    var b = e.target.closest('[data-ev]'); if(!b) return;
+    expView = b.getAttribute('data-ev');
+    document.querySelectorAll('#expViewSeg .seg-btn').forEach(function(x){ x.classList.toggle('active', x===b); });
+    if(lastReportData) renderExpenseList(lastReportData.expenseTxList);
+  });
+  document.getElementById('expFilterChips').addEventListener('click', function(e){
+    var b = e.target.closest('[data-ef]'); if(!b) return;
+    expFilter = b.getAttribute('data-ef');
+    document.querySelectorAll('#expFilterChips .chip').forEach(function(x){ x.classList.toggle('active', x===b); });
+    if(lastReportData) renderExpenseList(lastReportData.expenseTxList);
+  });
+  function shiftReport(n){
+    if(reportMode==='year'){ var y=document.getElementById('reportYear'); y.value=(parseInt(y.value,10)||new Date().getFullYear())+n; }
+    else { var m=document.getElementById('reportMonth'); m.value=monthShift(m.value||currentMonthStr(), -n); }
+    renderReport();
+  }
+  document.getElementById('rptPrev').addEventListener('click', function(){ shiftReport(-1); });
+  document.getElementById('rptNext').addEventListener('click', function(){ shiftReport(1); });
 
   renderAll();
 })();
