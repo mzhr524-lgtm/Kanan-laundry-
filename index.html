@@ -944,6 +944,28 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
   #printArea .pr-g td{ background:#eef3fa; font-weight:800; }
   #printArea .pr-rec.has-list{ break-inside:auto; }
 }
+
+/* ===== v5.1 — workers + A4 print ===== */
+.worker-row{ gap:8px; }
+.wk-wrap{ display:flex; align-items:center; gap:6px; }
+.wk-wage{ width:100px; min-height:40px!important; padding:6px 10px!important; text-align:center; border-radius:14px!important; }
+.wk-wrap small{ font-size:11px; color:var(--text-dim); white-space:nowrap; }
+.cost-field input[readonly]{ opacity:.75; }
+
+@page{ size:A4; margin:10mm; }
+@media print{
+  html, body{ background:#fff!important; margin:0!important; padding:0!important; height:auto!important; min-height:0!important; overflow:visible!important; }
+  #app{ display:block!important; width:auto!important; max-width:none!important; min-height:0!important; margin:0!important; padding:0!important; background:none!important; box-shadow:none!important; }
+  #app > *:not(#printArea):not(svg){ display:none!important; }
+  #printArea{ display:block!important; position:static!important; width:auto!important; max-width:none!important; margin:0!important; padding:0!important; box-sizing:border-box; direction:rtl; }
+  #printArea *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; box-sizing:border-box; }
+  #printArea h1{ font-size:19px; }
+  #printArea table{ width:100%; font-size:11px; table-layout:auto; }
+  #printArea th, #printArea td{ padding:3px 6px; word-break:break-word; overflow-wrap:anywhere; }
+  #printArea thead{ display:table-header-group; }
+  #printArea .print-summary{ gap:8px; } #printArea .print-summary div{ font-size:12px; padding:6px 10px; }
+  #printArea .print-card{ margin:4mm auto 0; page-break-inside:avoid; }
+}
 </style>
 </head>
 <body>
@@ -1032,12 +1054,18 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
         <svg class="ic chev"><use href="#i-chev"/></svg>
       </button>
       <div class="acc-body" id="accb-plan"><div class="acc-inner"><div class="acc-pad">
-        <div class="set-note">حدد سقف لمصروفك الشخصي بالأسبوع. يطلع كشريط بالرئيسية، وكل مرة تسجل مصروف شخصي يگلك كم باقي.</div>
+        <div class="set-note">سجّل عمالك وأجرة كل واحد بالأسبوع. التطبيق يجمعهم لحاله بحاسبة التكلفة والتنبؤ، ويعرف دفعات كل عامل من اسمه بوصف الصرف.</div>
+        <div class="set-lbl">العمال وأجورهم الأسبوعية</div>
+        <div id="workerListWrap"></div>
+        <div class="price-add-row">
+          <input type="text" id="workerName" class="pname" placeholder="اسم العامل" aria-label="اسم العامل">
+          <input type="number" id="workerWage" class="pprice" placeholder="الأسبوعية" inputmode="decimal" aria-label="الأجرة الأسبوعية">
+          <button class="ghost" id="btnAddWorker" type="button"><svg class="ic"><use href="#i-plus"/></svg> إضافة</button>
+        </div>
+        <div class="set-note" id="workersTotal" style="margin-top:8px"></div>
+        <div class="set-lbl">سقف المصروف الشخصي</div>
         <div class="cost-card">
-          <div class="cost-row2">
-            <div class="cost-field"><label>أجرة العامل الأسبوعية</label><input type="number" id="cfgWage" inputmode="decimal"></div>
-            <div class="cost-field"><label>سقف مصروفي الشخصي بالأسبوع</label><input type="number" id="cfgCap" inputmode="decimal" placeholder="مثال: 100000"></div>
-          </div>
+          <div class="cost-field"><label>سقف مصروفي الشخصي بالأسبوع</label><input type="number" id="cfgCap" inputmode="decimal" placeholder="مثال: 100000"></div>
         </div>
       </div></div></div>
     </section>
@@ -1054,11 +1082,14 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
           <div class="cost-sec-title">مصاريف ثابتة شهرية</div>
           <div class="cost-row2">
             <div class="cost-field"><label>إيجار المحل</label><input type="number" id="costRent" inputmode="decimal"></div>
-            <div class="cost-field"><label>أجور العامل</label><input type="number" id="costWorker" inputmode="decimal"></div>
+            <div class="cost-field"><label>أجور العمال (تنحسب من قائمة العمال)</label><input type="number" id="costWorker" inputmode="decimal"></div>
           </div>
+          <div class="cost-field"><label>أجور الماي</label><input type="number" id="costWater" inputmode="decimal"></div>
+
+          <div class="cost-sec-title">الكهرباء — مولدتين أهليتين (شهرياً)</div>
           <div class="cost-row2">
-            <div class="cost-field"><label>أجور الماي</label><input type="number" id="costWater" inputmode="decimal"></div>
-            <div class="cost-field"><label>أجور الكهرباء</label><input type="number" id="costElec" inputmode="decimal"></div>
+            <div class="cost-field"><label>خط نهاري</label><input type="number" id="costElecDay" inputmode="decimal"></div>
+            <div class="cost-field"><label>خط ليلي</label><input type="number" id="costElecNight" inputmode="decimal"></div>
           </div>
           <div class="cost-field"><label>صيانة ومصاريف عامة</label><input type="number" id="costMaint" inputmode="decimal"></div>
 
@@ -1318,6 +1349,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
         <div id="reportMonthPicker" class="pick-mid"><input type="month" id="reportMonth" aria-label="الشهر"></div>
         <div id="reportYearPicker" class="pick-mid hidden-field"><input type="number" id="reportYear" min="2020" max="2100" aria-label="السنة"></div>
         <button type="button" class="ghost pick-btn" id="rptNext" aria-label="الفترة التالية"><svg class="ic chev rot-l"><use href="#i-chev"/></svg></button>
+        <button type="button" class="ghost pick-btn" id="btnPrintReport" aria-label="تحميل التقرير PDF" title="تحميل التقرير PDF"><svg class="ic"><use href="#i-printer"/></svg></button>
       </div>
 
       <div class="report-grid">
@@ -1349,7 +1381,6 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
       </div>
       <div id="expenseDetailList"></div>
 
-      <button class="primary pdf-btn" id="btnPrintReport" type="button"><svg class="ic"><use href="#i-printer"/></svg> تحميل التقرير PDF</button>
     </section>
   </main>
 
@@ -2116,7 +2147,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
   // ---------------- Cost calculator ----------------
   var LS_COST = 'kanan_cost';
   var DEFAULT_COST = {
-    rent:150000, worker:150000, water:11000, electricity:45000, maintenance:25000,
+    rent:150000, worker:150000, water:11000, elecDay:25000, elecNight:18000, electricity:43000, maintenance:25000,
     cleanPrice:15000, cleanDays:15,
     gasPrice:7000, gasDays:1,
     nylonPrice:22000, nylonQty:100,
@@ -2126,7 +2157,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
   var costData = DEFAULT_COST;
   try{
     var savedCost = JSON.parse(localStorage.getItem(LS_COST) || 'null');
-    if(savedCost) costData = savedCost;
+    if(savedCost){ if(savedCost.elecDay === undefined){ savedCost.elecDay = 25000; savedCost.elecNight = 18000; savedCost.electricity = 43000; } costData = savedCost; }
   }catch(e){}
   var lastCostPerPiece = 0;
 
@@ -2134,7 +2165,8 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
     document.getElementById('costRent').value = costData.rent;
     document.getElementById('costWorker').value = costData.worker;
     document.getElementById('costWater').value = costData.water;
-    document.getElementById('costElec').value = costData.electricity;
+    document.getElementById('costElecDay').value = costData.elecDay || 0;
+    document.getElementById('costElecNight').value = costData.elecNight || 0;
     document.getElementById('costMaint').value = costData.maintenance;
     document.getElementById('costCleanPrice').value = costData.cleanPrice;
     document.getElementById('costCleanDays').value = costData.cleanDays;
@@ -2153,7 +2185,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
   function computeCost(silent){
     var v = function(id){ return parseFloat(document.getElementById(id).value) || 0; };
     costData = {
-      rent: v('costRent'), worker: v('costWorker'), water: v('costWater'), electricity: v('costElec'), maintenance: v('costMaint'),
+      rent: v('costRent'), worker: v('costWorker'), water: v('costWater'), elecDay: v('costElecDay'), elecNight: v('costElecNight'), electricity: v('costElecDay') + v('costElecNight'), maintenance: v('costMaint'),
       cleanPrice: v('costCleanPrice'), cleanDays: v('costCleanDays'),
       gasPrice: v('costGasPrice'), gasDays: v('costGasDays'),
       nylonPrice: v('costNylonPrice'), nylonQty: v('costNylonQty'),
@@ -2534,11 +2566,9 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
         // cost calculator + spending plan: only fill them if the user never changed the defaults
         try{
           if(data.cost && JSON.stringify(costData) === JSON.stringify(DEFAULT_COST)){ costData = data.cost; fillCostInputs(); computeCost(true); }
-          if(data.cfg && !cfg.cap){
-            cfg.wage = +data.cfg.wage || cfg.wage; cfg.cap = +data.cfg.cap || 0;
-            localStorage.setItem('kanan_cfg', JSON.stringify(cfg));
-            document.getElementById('cfgWage').value = cfg.wage || ''; document.getElementById('cfgCap').value = cfg.cap || '';
-          }
+          if(data.cfg && !cfg.cap){ cfg.cap = +data.cfg.cap || 0; document.getElementById('cfgCap').value = cfg.cap || ''; }
+          if(data.cfg && Array.isArray(data.cfg.workers) && data.cfg.workers.length && !cfg.wkTouched){ cfg.workers = data.cfg.workers; sumWage(); syncWorkerCost(); renderWorkers(); }
+          saveCfg();
         }catch(e2){}
         persist();
         renderAll();
@@ -2765,13 +2795,18 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
   // ---------------- إعدادات خطة الصرف ----------------
   var cfg = { wage: 35000, cap: 0 };
   try{ var _c = JSON.parse(localStorage.getItem('kanan_cfg')||'null'); if(_c) cfg = Object.assign(cfg,_c); }catch(e){}
+  if(!Array.isArray(cfg.workers)){
+    // first run of the workers list: the two current workers (weekly wages), editable from Settings
+    cfg.workers = [{id:'w1', name:'مصطفى', wage:40000}, {id:'w2', name:'مقتدى', wage:35000}];
+    cfg.wage = 75000;
+    try{ localStorage.setItem('kanan_cfg', JSON.stringify(cfg)); }catch(e){}
+  }
   (function(){
-    var w=document.getElementById('cfgWage'), c=document.getElementById('cfgCap'); if(!w||!c) return;
-    w.value=cfg.wage||''; c.value=cfg.cap||'';
-    function save(){ cfg.wage=+w.value||0; cfg.cap=+c.value||0; try{ localStorage.setItem('kanan_cfg',JSON.stringify(cfg)); }catch(e){} }
+    var c=document.getElementById('cfgCap'); if(!c) return;
+    c.value=cfg.cap||'';
+    function save(){ cfg.cap=+c.value||0; saveCfg(); }
     function sv(){ save(); renderAll(); }
-    w.addEventListener('input',save); c.addEventListener('input',save);
-    w.addEventListener('change',sv); c.addEventListener('change',sv);
+    c.addEventListener('input',save); c.addEventListener('change',sv);
   })();
   function weekInfo(){
     var d=new Date(), idx=(d.getDay()+1)%7, s=new Date(d); s.setDate(d.getDate()-idx);
@@ -2824,7 +2859,19 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
     if(P.top[0]&&amt(P.top[0])>=25000&&P.tot){ var o=P.top[0]; add('أكبر مصروف شخصي بحركة وحدة','«'+escapeHtml(o.description)+'» '+R(amt(o))+' بتاريخ '+fmtShortDate(o.date)+' = '+Math.round(amt(o)/P.tot*100)+'% من شهرك الشخصي. حركة وحدة ممكن تأكل سقف أسبوع كامل — اسأل نفسك قبل الدفع: هل هو ضروري هالأسبوع؟','warn',[o]); }
     if(P.tot&&P.tgtWeek>0) add('سقف أسبوعي مقترح','لو طبقت التخفيضات، مصروفك الشخصي يصير ≈ '+R(P.tgtWeek)+' بالأسبوع (≈ '+R(P.tgtDay)+' باليوم). فعّله من الإعدادات وراح يطلع لك شريط بالرئيسية. جرّب تسحب المبلغ نقداً بظرف وإذا خلص تتوقف. التوفير المتوقع ≈ '+R(P.svMonth)+' شهرياً.','good');
     var wg=(bk['أجور العامل']||0), ad=(bk['سلف العامل']||0), dNm=(mk===currentMonthStr())?new Date().getDate():30;
-    if(cfg.wage&&(wg+ad)>0){ var due=cfg.wage*dNm/7, got=wg+ad; add('حساب زكريا','أخذ '+R(got)+' بهالشهر، والأسبوعية '+R(cfg.wage)+' تساوي ≈ '+R(due)+' للفترة ('+(got>=due?'زيادة عليها '+R(got-due):'المسجل أقل منها بـ '+R(due-got)+' — يمكن أسبوع ما انسجل')+').'+(ad?' السلف المسجلة '+R(ad)+'.':'')+' سجّل الأسبوعية بكلمة «أسبوعية زكريا» والسلف بكلمة «سلفة زكريا» حتى تنفصل وتعرف الزيادة بالضبط، وبدل ما تنسى السلف، اقطعها من الأسبوعية أو حدد سقفاً لها.','',shop.filter(function(t){ var b=bucketOf(t.description); return b==='أجور العامل'||b==='سلف العامل'; })); }
+    if((cfg.workers||[]).length && (wg+ad)>0){
+      var wrkTx = shop.filter(function(t){ var b=bucketOf(t.description); return b==='أجور العامل'||b==='سلف العامل'; }), usedW = {}, grpW = [], linesW = [];
+      cfg.workers.forEach(function(w){
+        var nm = (w.name||'').trim().toLowerCase(), l = wrkTx.filter(function(t){ return nm && (t.description||'').toLowerCase().indexOf(nm)!==-1; });
+        l.forEach(function(t){ usedW[t._id] = 1; });
+        var adv = sum(l.filter(function(t){ return bucketOf(t.description)==='سلف العامل'; })), got = sum(l), due = (+w.wage||0)*dNm/7;
+        if(l.length) grpW.push({n:w.name, list:l});
+        linesW.push('«'+escapeHtml(w.name)+'»: أخذ '+R(got)+' والمتوقع ≈ '+R(due)+' ('+(got>=due?'زيادة '+R(got-due):'ناقص '+R(due-got))+')'+(adv?' · منها سلف '+R(adv):''));
+      });
+      var restW = wrkTx.filter(function(t){ return !usedW[t._id]; });
+      if(restW.length){ grpW.push({n:'بدون اسم عامل', list:restW}); linesW.push('حركات أجور بدون اسم عامل: '+R(sum(restW))+' — اكتب اسم العامل بالوصف حتى تنفصل.'); }
+      add('حساب العمال', linesW.join('\n')+'\nسجّل الأسبوعية بكلمة «أسبوعية + الاسم» والسلفة «سلفة + الاسم». وبدل ما تنسى السلف، اقطعها من الأسبوعية.', '', grpW.length?{groups:grpW}:null);
+    }
     if(shopTot&&(bk['مشتريات كبيرة']||0)/shopTot>.15) add('مشتريات كبيرة غير متكررة','بند العباءة '+R(bk['مشتريات كبيرة'])+' ('+Math.round(bk['مشتريات كبيرة']/shopTot*100)+'% من مصاريف المحل). هذا مو مصروف اعتيادي — لا تقارن شهرك به. تأكد إنه ينرجع كربح أو استثمار.','',shop.filter(function(t){ return bucketOf(t.description)==='مشتريات كبيرة'; }));
     if(shopTot&&(bk['أخرى']||0)/shopTot>.25) add('وصف المصاريف غير واضح','بند «أخرى» '+Math.round(bk['أخرى']/shopTot*100)+'% من مصاريف المحل. اكتب وصف أوضح حتى يتحسن التحليل. اضغط لتشوف الحركات وعدّل وصفها.','',shop.filter(function(t){ return bucketOf(t.description)==='أخرى'; }));
     var wd={}, wc={}; Object.keys(dailyIncomeMap()).forEach(function(d){ var g=isoToDate(d).getDay(); wd[g]=(wd[g]||0)+dailyIncomeMap()[d]; wc[g]=(wc[g]||0)+1; });
@@ -2913,6 +2960,42 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
                        : ic('tag')+'<span>راح ينحسب تحت: <b>'+escapeHtml(n)+'</b></span>';
   }
 
+  // fixed monthly commitments: what is expected vs what was recorded, line by line
+  function commitLines(mk, shop, cd){
+    var lines = [];
+    function add(n, exp, list){ lines.push({n:n, exp:Math.round(exp||0), paid:sum(list), txs:list}); }
+    function inB(t, names){ return names.indexOf(bucketOf(t.description)) >= 0; }
+    function has(t, w){ return (t.description||'').toLowerCase().indexOf(w) !== -1; }
+    add('إيجار المحل', cd.rent, shop.filter(function(t){ return inB(t,['إيجار']); }));
+    var wl = cfg.workers||[], wrk = shop.filter(function(t){ return inB(t,['أجور العامل','سلف العامل']); });
+    if(wl.length){
+      var used = {};
+      wl.forEach(function(w){
+        var nm = (w.name||'').trim().toLowerCase(), l = wrk.filter(function(t){ return nm && has(t,nm); });
+        l.forEach(function(t){ used[t._id] = 1; });
+        add('أجور '+w.name, (+w.wage||0)*4.33, l);
+      });
+      var rest = wrk.filter(function(t){ return !used[t._id]; });
+      if(rest.length) add('أجور بدون اسم عامل (أو عامل سابق)', 0, rest);
+    } else add('أجور العمال', cd.worker, wrk);
+    add('ماء', cd.water, shop.filter(function(t){ return inB(t,['ماء']); }));
+    var el = shop.filter(function(t){ return inB(t,['كهرباء ومولد']); });
+    var day = el.filter(function(t){ return has(t,'نهار'); });
+    var night = el.filter(function(t){ return has(t,'ليل') && day.indexOf(t) < 0; });
+    var other = el.filter(function(t){ return day.indexOf(t) < 0 && night.indexOf(t) < 0; });
+    add('مولدة نهاري', cd.elecDay, day);
+    add('مولدة ليلي', cd.elecNight, night);
+    if(other.length) add('كهرباء/مولد بدون تحديد الخط', 0, other);
+    add('صيانة', cd.maintenance, shop.filter(function(t){ return inB(t,['صيانة']); }));
+    return lines.filter(function(l){ return l.exp > 0 || l.paid > 0; });
+  }
+  function printCommit(mk){
+    var cl = commitLines(mk, shopList(mk), costData||{}); if(!cl.length) return '';
+    return '<h2>الالتزامات الثابتة</h2><table><thead><tr><th>البند</th><th>المتوقع</th><th>المسجل</th><th>الباقي</th></tr></thead><tbody>'+cl.map(function(l){
+      return '<tr><td>'+escapeHtml(l.n)+'</td><td>'+(l.exp?fmtNum(l.exp):'—')+'</td><td>'+fmtNum(l.paid)+'</td><td>'+(l.exp?(l.paid>=l.exp?'مدفوع ✓':fmtNum(l.exp-l.paid)):'—')+'</td></tr>';
+    }).join('')+'</tbody></table>';
+  }
+
   function prList(spec){
     if(!spec || spec.noPrint) return '';
     var l = specTxs(spec).slice(); if(!l.length) return '';
@@ -2953,6 +3036,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
     function tbl(title,obj,tot,extra){ var ks=Object.keys(obj).sort(function(a,b){return obj[b]-obj[a];}); return '<h2>'+title+'</h2><table><thead><tr><th>البند</th><th>المبلغ</th><th>النسبة</th><th style="width:30%"></th>'+(extra?'<th>الهدف</th>':'')+'</tr></thead><tbody>'+ks.map(function(k){ var p=tot?Math.round(obj[k]/tot*100):0, r=0; if(extra){ var q=PB.filter(function(x){return x[0]===k;})[0]; r=q?q[2]:(k==='متفرقة وأخرى'?.5:0); } return '<tr><td>'+k+'</td><td>'+R(obj[k])+'</td><td>'+p+'%</td><td><div class="pr-bar"><i style="width:'+p+'%"></i></div></td>'+(extra?'<td>'+(r?R(obj[k]*(1-r)):'ثابت')+'</td>':'')+'</tr>'; }).join('')+'</tbody></table>'; }
     h+=tbl('هيكل مصاريف المحل',bk,shopTot,false);
     if(P.tot) h+=tbl('أين يذهب المصروف الشخصي وخطة التخفيض',P.b,P.tot,true)+'<div class="pr-rec good"><b>الخطة:</b> مصروفك الشخصي الحالي '+R(P.perDay*30)+' شهرياً ← الهدف '+R(P.perDay*30*(1-P.cut))+' (توفير ≈ '+R(P.svMonth)+'). السقف الأسبوعي المقترح '+R(P.tgtWeek)+'.</div>';
+    h+=printCommit(mk);
     h+=printByBucket(mk);
     return h;
   }
@@ -2967,7 +3051,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
     ['مشتريات كبيرة',['عباءة','عربون']], ['تبرعات',['تبرع']], ['ضيافة',['فطور','شاي','ضيافة']]
   ];
   var FIXED_MAP = { 'إيجار':'rent', 'أجور العامل':'worker', 'ماء':'water', 'كهرباء ومولد':'electricity', 'صيانة':'maintenance' };
-  function bucketOf(d){ d=(d||'').toLowerCase(); for(var i=0;i<BUCKETS.length;i++){ for(var j=0;j<BUCKETS[i][1].length;j++){ if(d.indexOf(BUCKETS[i][1][j])!==-1) return BUCKETS[i][0]; } } return 'أخرى'; }
+  function bucketOf(d){ d=(d||'').toLowerCase(); var wn=(typeof cfg!=='undefined'&&cfg&&cfg.workers)?cfg.workers:[]; for(var q=0;q<wn.length;q++){ var nm=(wn[q].name||'').trim().toLowerCase(); if(nm&&d.indexOf(nm)!==-1) return d.indexOf('سلف')!==-1?'سلف العامل':'أجور العامل'; } for(var i=0;i<BUCKETS.length;i++){ for(var j=0;j<BUCKETS[i][1].length;j++){ if(d.indexOf(BUCKETS[i][1][j])!==-1) return BUCKETS[i][0]; } } return 'أخرى'; }
   function mTx(mk){ return state.transactions.filter(function(t){ return t.date && t.date.indexOf(mk)===0; }); }
   function amt(t){ return Number(t.amount)||0; }
   function sum(list,f){ return list.reduce(function(a,t){ return a+((!f||f(t))?amt(t):0); },0); }
@@ -3022,7 +3106,8 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
     if(isCur){
       var dN=new Date().getDate(), dim=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate(), rem=dim-dN;
       var avgInc=dN?inc/dN:0, fixedPaid=0, fixedLeft=0, fixedDet='';
-      Object.keys(FIXED_MAP).forEach(function(b){ var paid=(bk[b]||0)+(b==='أجور العامل'?(bk['سلف العامل']||0):0), exp=(b==='أجور العامل'&&cfg.wage)?cfg.wage*4.33:(+cd[FIXED_MAP[b]]||0); fixedPaid+=paid; fixedLeft+=Math.max(0,exp-paid); if(exp>0) fixedDet+='<div class="dl-grp"><span>'+b+'</span><b>باقي '+R(Math.max(0,exp-paid))+'</b></div><div class="dl-note">المتوقع '+R(exp)+' · المسجل '+R(paid)+'</div>'; });
+      var clF = commitLines(mk, shop, cd);
+      clF.forEach(function(l){ fixedPaid += l.paid; if(l.exp > 0){ var left = Math.max(0, l.exp - l.paid); fixedLeft += left; fixedDet += '<div class="dl-grp"><span>'+escapeHtml(l.n)+'</span><b>باقي '+R(left)+'</b></div><div class="dl-note">المتوقع '+R(l.exp)+' · المسجل '+R(l.paid)+'</div>'; } });
       var varAvg=dN?Math.max(0,shopTot-fixedPaid)/dN:0;
       var endBal=cashNow+avgInc*rem-fixedLeft-varAvg*rem;
       dkPrefix='cash'; h3=rowD('الصافي الفعلي لحد اليوم',R(cashNow),cashNow<0?'neg':'pos',{n:3,html:'<div class="dl-grp"><span>الدخل</span><b>'+R(inc)+'</b></div><div class="dl-grp"><span>مصاريف المحل</span><b>−'+R(shopTot)+'</b></div><div class="dl-grp"><span>مصروف شخصي</span><b>−'+R(pers)+'</b></div>'})+row('دخل متوقع للأيام الباقية ('+rem+' يوم)',R(avgInc*rem))+rowD('التزامات ثابتة ما انسجلت بعد',R(fixedLeft),'',fixedDet?{n:1,html:fixedDet}:null)+row('مصاريف متغيرة متوقعة',R(varAvg*rem))+row('الصافي المتوقع نهاية الشهر',R(endBal),endBal<0?'neg':'pos');
@@ -3032,6 +3117,22 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
       if(!(+cd.rent||+cd.worker||cfg.wage)) h3+=note('أدخل مصاريفك الثابتة بالإعدادات حتى يصير التنبؤ أدق.');
     } else { h3=row('الصافي الفعلي لهذا الشهر',R(cashNow),cashNow<0?'neg':'pos')+note('التنبؤ يشتغل على الشهر الحالي فقط.'); }
     out.push(card('التنبؤ النقدي والسيولة',h3));
+
+    // 3b) الالتزامات الثابتة — each line: expected vs recorded
+    var clC = commitLines(mk, shop, cd), h3b = '';
+    dkPrefix = 'fix';
+    if(!clC.length) h3b = note('أدخل العمال والمولدات والإيجار بالإعدادات حتى تظهر الالتزامات.');
+    else {
+      var leftAll = 0;
+      clC.forEach(function(l){
+        var done = l.exp > 0 && l.paid >= l.exp;
+        if(l.exp > 0) leftAll += Math.max(0, l.exp - l.paid);
+        h3b += rowD(escapeHtml(l.n)+(l.exp>0?' ('+R(l.exp)+')':''), l.exp>0 ? (done?'مدفوع ✓':'باقي '+R(l.exp-l.paid)) : 'مسجل '+R(l.paid), done?'pos':(l.exp>0?'neg':''), l.txs, l.exp>0 ? bar(Math.min(100,l.paid/l.exp*100)) : '');
+      });
+      h3b += row('المتبقي من الالتزامات', R(leftAll), leftAll>0?'neg':'pos');
+      if((+cd.elecDay||+cd.elecNight)) h3b += note('اكتب «نهاري» أو «ليلي» بوصف دفعة المولدة (مثلاً: مولدة نهاري) حتى تنحسب على خطها. ودفعات العمال بالاسم.');
+    }
+    out.push(card('الالتزامات الثابتة', h3b));
 
     // 4) رصد الانحرافات
     var daily={}; state.transactions.forEach(function(t){ if(t.type==='income'&&t.date) daily[t.date]=(daily[t.date]||0)+amt(t); });
@@ -3437,7 +3538,7 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
     if(typeof cfg === 'undefined' || !cfg) return; // called during early init, before the plan settings exist
     function set(id,t){ var e=document.getElementById(id); if(e) e.textContent=t; }
     set('sumPrices', state.prices.length ? (state.prices.length+' قطعة بالقائمة') : 'ما أضفت أسعار بعد');
-    set('sumPlan', cfg.cap>0 ? ('سقف أسبوعي '+R(cfg.cap)+' د.ع') : 'السقف غير مفعّل');
+    set('sumPlan', ((cfg.workers&&cfg.workers.length) ? (cfg.workers.length+' عمال · '+R(cfg.wage)+' بالأسبوع') : 'ما أضفت عمال')+(cfg.cap>0 ? (' · سقف '+R(cfg.cap)) : ''));
     set('sumCost', lastCostPerPiece>0 ? ('تكلفة القطعة ≈ '+R(lastCostPerPiece)+' د.ع') : 'اضغط احسب لتظهر التكلفة');
     set('sumPkg', 'شوف إذا خصم الباقة آمن لو لا');
     var le=null; try{ le=localStorage.getItem(LS_LAST_EXPORT); }catch(e){}
@@ -3475,6 +3576,40 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
   }
   document.getElementById('rptPrev').addEventListener('click', function(){ shiftReport(-1); });
   document.getElementById('rptNext').addEventListener('click', function(){ shiftReport(1); });
+
+  // ---------------- workers ----------------
+  function saveCfg(){ try{ localStorage.setItem('kanan_cfg', JSON.stringify(cfg)); }catch(e){} }
+  function sumWage(){ cfg.wage = (cfg.workers||[]).reduce(function(a,w){ return a + (+w.wage||0); }, 0); }
+  function syncWorkerCost(){
+    var el = document.getElementById('costWorker'); if(!el) return;
+    var has = !!(cfg.workers && cfg.workers.length);
+    el.readOnly = has;
+    if(has){ el.value = Math.round(cfg.wage*4.33); computeCost(true); }
+  }
+  function renderWorkers(){
+    var wrap = document.getElementById('workerListWrap'), tot = document.getElementById('workersTotal'); if(!wrap) return;
+    var wl = cfg.workers||[];
+    wrap.innerHTML = wl.length ? wl.map(function(w){
+      return '<div class="price-row worker-row"><span class="pr-name">'+escapeHtml(w.name)+'</span><span class="wk-wrap"><input type="number" class="wk-wage" inputmode="decimal" value="'+(+w.wage||0)+'" aria-label="أجرة '+escapeHtml(w.name)+'" onchange="setWorkerWage(\''+w.id+'\',this.value)"><small>د.ع/أسبوع</small></span><button type="button" class="del-x" aria-label="حذف '+escapeHtml(w.name)+'" onclick="deleteWorker(\''+w.id+'\')">✕</button></div>';
+    }).join('') : '<div class="calc-empty">ما أضفت عمال بعد</div>';
+    if(tot) tot.textContent = wl.length ? ('المجموع '+R(cfg.wage)+' بالأسبوع ≈ '+R(cfg.wage*4.33)+' بالشهر') : '';
+  }
+  function workersChanged(){ cfg.wkTouched = true; sumWage(); saveCfg(); syncWorkerCost(); renderWorkers(); renderAll(); }
+  window.setWorkerWage = function(id,v){ var w=(cfg.workers||[]).find(function(x){ return x.id===id; }); if(w){ w.wage = parseFloat(v)||0; workersChanged(); } };
+  window.deleteWorker = function(id){
+    var w=(cfg.workers||[]).find(function(x){ return x.id===id; });
+    if(!w || !window.confirm('حذف العامل «'+w.name+'» من القائمة؟ حركاته السابقة تبقى بالسجل.')) return;
+    cfg.workers = cfg.workers.filter(function(x){ return x.id!==id; }); workersChanged();
+  };
+  document.getElementById('btnAddWorker').addEventListener('click', function(){
+    var n = document.getElementById('workerName').value.trim(), w = parseFloat(document.getElementById('workerWage').value);
+    if(!n){ toast('اكتب اسم العامل'); return; }
+    if(!(w>0)){ toast('اكتب أجرته الأسبوعية'); return; }
+    cfg.workers = cfg.workers||[]; cfg.workers.push({id:'w'+Date.now().toString(36), name:n, wage:w});
+    document.getElementById('workerName').value=''; document.getElementById('workerWage').value='';
+    workersChanged(); toast('انضاف العامل ✓');
+  });
+  sumWage(); syncWorkerCost(); renderWorkers();
 
   renderAll();
 })();
