@@ -1,16 +1,26 @@
 {
-  "name": "Kanan Laundry",
-  "short_name": "Kanan Laundry",
-  "start_url": "./index.html",
+  "name": "مكوى كنعان المركزي",
+  "short_name": "كنعان",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#F2F7FC",
+  "orientation": "any",
+  "dir": "rtl",
+  "lang": "ar",
+  "background_color": "#F6F9FE",
   "theme_color": "#2E6FBF",
-  "orientation": "portrait",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
