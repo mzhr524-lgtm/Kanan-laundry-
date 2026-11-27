@@ -1,7 +1,7 @@
 // Kanan Laundry service worker — v6
 // Network-first: the app always tries to load the newest files, and falls back to the
 // saved copy when there is no internet. Bump CACHE on every update.
-var CACHE = 'kanan-laundry-v9';
+var CACHE = 'kanan-laundry-v10';
 var CORE = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', function(e){
