@@ -1016,6 +1016,12 @@ button.tap[aria-expanded="true"] .chev{ transform:rotate(180deg); }
 
 body.lk #btnSettings, body.lk .tab-btn[data-nav="dash"], body.lk .tab-btn[data-nav="tx"], body.lk .tab-btn[data-nav="reports"], body.lk .tab-btn[data-nav="cust"]{display:none!important}
 #btnLock{font-size:18px}
+
+#acc-prices,#btnCalcToggle,#calcPanel{display:none!important}
+.cp-photo{width:96px;height:96px;border-radius:50%;background:var(--surface-2);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;font-weight:700;flex:none;color:var(--text-dim)}
+.cp-photo img{width:100%;height:100%;object-fit:cover}
+.cav{border-radius:50%;object-fit:cover;background:var(--surface-2);display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.ord-sug button{align-items:center}
 </style>
 </head>
 <body>
@@ -1364,6 +1370,7 @@ body.lk #btnSettings, body.lk .tab-btn[data-nav="dash"], body.lk .tab-btn[data-n
     </section>
 
     <section class="tab" data-tab="cust">
+      <button class="primary" id="custAdd" type="button" style="width:100%;margin-bottom:12px">+ زبون جديد</button>
       <div class="search-wrap"><input type="text" id="custSearch" placeholder="ابحث باسم الزبون…"></div>
       <div id="custList"></div>
     </section>
@@ -1538,6 +1545,20 @@ body.lk #btnSettings, body.lk .tab-btn[data-nav="dash"], body.lk .tab-btn[data-n
   <div id="pinMsg" style="color:var(--expense);min-height:20px;font-size:13px"></div>
   <div class="ord-act" style="margin-top:8px"><button class="ghost" id="pinNo" type="button">إلغاء</button><button class="primary" id="pinOk" type="button">تأكيد</button></div>
   <button class="ghost" id="pinForgot" type="button" style="margin-top:10px;width:100%">نسيت الرمز</button>
+</div></div>
+<div id="custPage" class="ord-ov"><div class="ord-box" style="max-width:640px;border-radius:32px">
+  <div class="ord-head"><b>ملف الزبون</b><button class="ghost" id="cpClose" type="button">إغلاق</button></div>
+  <div style="display:flex;gap:14px;align-items:center">
+    <div class="cp-photo" id="cpPhoto"></div><input type="file" id="cpFile" accept="image/*" hidden>
+    <div style="flex:1"><input id="cpName" type="text" placeholder="الاسم"><input id="cpPhone" type="tel" inputmode="tel" placeholder="رقم الهاتف (07xxxxxxxxx)" style="margin-top:8px"></div>
+  </div>
+  <div class="ord-row" style="margin:12px 0"><button class="ghost" id="cpWa" type="button">واتساب</button><button class="ghost" id="cpCall" type="button">اتصال</button><button class="ghost" id="cpRmPh" type="button">حذف الصورة</button></div>
+  <div class="ord-sum" id="cpStats"></div>
+  <div class="ord-meta" id="cpFav"></div>
+  <input id="cpDisc" type="number" min="0" max="100" placeholder="نسبة الخصم %" style="margin-bottom:8px">
+  <textarea id="cpNote" placeholder="ملاحظات" style="width:100%;min-height:64px;margin-bottom:8px"></textarea>
+  <div id="cpOrders"></div>
+  <div class="ord-act" style="margin-top:12px"><button class="primary" id="cpSave" type="button">حفظ</button><button class="ghost" id="cpDel" type="button" style="color:var(--expense)">حذف الزبون</button></div>
 </div></div>
 <script>
 (function(){
@@ -2701,12 +2722,14 @@ body.lk #btnSettings, body.lk .tab-btn[data-nav="dash"], body.lk .tab-btn[data-n
     oE('ordWhy').textContent=c.p?('شغل معلّق '+c.q+' د + وقت القطع '+c.w+' د + مجال '+ORD_BUF+' د (يحسب ساعات الدوام فقط)'+(c.dc?' · خصم '+c.dc+'%':'')+(od.svc?' · الغسل لا يقل عن 5 ساعات':'')+(od.fixed?(c.tight?' · ⚠ الموعد أقصر من الوقت اللازم':' · حسب طلب الزبون'):'')+(od.adj&&!od.fixed?' · تعديلك '+(od.adj>0?'+':'')+od.adj+' د':'')):'اختر القطع حتى يظهر الموعد';
     oE('ordSave').disabled=!c.p;
   }
+  function custAv(n,z){ var m=custMeta[n]||{}; return m.photo?'<img class="cav" style="width:'+z+'px;height:'+z+'px" src="'+m.photo+'" alt="">':'<span class="cav" style="width:'+z+'px;height:'+z+'px">'+escapeHtml((n||'؟').charAt(0))+'</span>'; }
   function ordSug(){
     var v=oE('ordName').value.trim(), box=oE('ordSug'); if(od.quick||!v){ box.innerHTML=''; return; }
     var cnt={}; state.orders.forEach(function(o){ if(o.name) cnt[o.name]=(cnt[o.name]||0)+1; });
-    state.subscriptions.forEach(function(x){ if(x.customerName && !cnt[x.customerName]) cnt[x.customerName]=0; });
+    Object.keys(custMeta).forEach(function(k){ if(!(k in cnt)) cnt[k]=0; });
+    state.subscriptions.forEach(function(x){ if(x.customerName && !(x.customerName in cnt)) cnt[x.customerName]=0; });
     var names=Object.keys(cnt).filter(function(n){ return n.indexOf(v)>-1; }).sort(function(a,b){ return cnt[b]-cnt[a]; }).slice(0,5);
-    box.innerHTML=names.map(function(n){ return '<button type="button" data-n="'+escapeHtml(n)+'">'+escapeHtml(n)+'<small>'+(cnt[n]?cnt[n]+' طلب':'مشترك')+'</small></button>'; }).join('')+
+    box.innerHTML=names.map(function(n){ var ph=((custMeta[n]||{}).phone||'').replace(/\D/g,'').slice(-4); return '<button type="button" data-n="'+escapeHtml(n)+'">'+custAv(n,34)+'<span style="flex:1;margin:0 10px">'+escapeHtml(n)+'</span><small>'+(cnt[n]?cnt[n]+' طلب':'')+(ph?' · ••'+ph:'')+'</small></button>'; }).join('')+
       (names.indexOf(v)>-1?'':'<button type="button" data-n="'+escapeHtml(v)+'"><b>إضافة «'+escapeHtml(v)+'» كزبون جديد</b></button>');
   }
   function ordOpen(){
@@ -2830,23 +2853,48 @@ body.lk #btnSettings, body.lk .tab-btn[data-nav="dash"], body.lk .tab-btn[data-n
     Object.keys(custMeta).forEach(function(k){ if(!m[k]) m[k]={name:k,n:0,p:0,t:0,last:0,it:{}}; });
     return m;
   }
+  var cp={name:'',photo:'',isNew:false};
+  function waNum(p){ var d=String(p||'').replace(/\D/g,''); if(d.indexOf('00')===0) d=d.slice(2); if(d.charAt(0)==='0') d='964'+d.slice(1); return d; }
+  function cpResize(f,cb){ var r=new FileReader(); r.onload=function(){ var im=new Image(); im.onload=function(){ var z=240,c=document.createElement('canvas'),k=Math.min(im.width,im.height); c.width=c.height=z; c.getContext('2d').drawImage(im,(im.width-k)/2,(im.height-k)/2,k,k,0,0,z,z); cb(c.toDataURL('image/jpeg',.7)); }; im.src=r.result; }; r.readAsDataURL(f); }
+  function cpPhoto(){ oE('cpPhoto').innerHTML=cp.photo?'<img src="'+cp.photo+'" alt="">':'<span>+ صورة</span>'; }
   function renderCust(){
     var q=oE('custSearch').value.trim(), m=custAgg();
     var arr=Object.keys(m).map(function(k){ return m[k]; }).filter(function(c){ return !q || c.name.indexOf(q)>-1; }).sort(function(a,b){ return b.t-a.t; });
     oE('custList').innerHTML=arr.length?arr.map(function(c){
-      var d=(custMeta[c.name]||{}).disc||0, open=custOpen===c.name, nm=escapeHtml(c.name);
-      var fav=Object.keys(c.it).sort(function(a,b){ return c.it[b]-c.it[a]; }).slice(0,3).map(function(i){ return ORD_ITEMS[i][0]+' ×'+c.it[i]; }).join('، ')||'—';
-      return '<div class="ord-card" data-c="'+nm+'"><div class="ord-top"><b>'+nm+'</b>'+(d?'<span class="ord-no">خصم '+d+'%</span>':'')+'<span>'+c.n+' زيارة</span></div>'+
-        '<div class="ord-meta">'+c.p+' قطعة · صرف '+money(c.t)+' د.ع'+(c.last?' · آخر زيارة '+fmtDate(isoFromDate(new Date(c.last))):'')+'</div>'+
-        (open?'<div class="ord-meta">متوسط الطلب: '+money(c.n?Math.round(c.t/c.n):0)+' د.ع<br>أكثر ما يجيب: '+fav+'</div><div class="ord-row"><input type="number" id="custDisc" min="0" max="100" placeholder="نسبة الخصم %" value="'+(d||'')+'"><button class="primary" type="button" data-save="'+nm+'">حفظ الخصم</button></div>':'')+'</div>';
-    }).join(''):emptyHTML('plus','الزبائن يظهرون هنا بعد أول طلب باسمهم');
+      var mt=custMeta[c.name]||{}, d=mt.disc||0, nm=escapeHtml(c.name);
+      return '<div class="ord-card" data-c="'+nm+'"><div class="ord-top">'+custAv(c.name,44)+'<b>'+nm+'</b>'+(d?'<span class="ord-no">خصم '+d+'%</span>':'')+'<span>'+c.n+' زيارة</span></div><div class="ord-meta">'+c.p+' قطعة · صرف '+money(c.t)+' د.ع'+(mt.phone?' · '+escapeHtml(mt.phone):'')+(c.last?' · آخر زيارة '+fmtDate(isoFromDate(new Date(c.last))):'')+'</div></div>';
+    }).join(''):emptyHTML('plus','الزبائن يظهرون هنا بعد أول طلب باسمهم، أو أضفهم بزر «زبون جديد»');
+  }
+  function openCust(name,isNew){
+    cp.name=name; cp.isNew=!!isNew; var mt=custMeta[name]||{}, c=custAgg()[name]||{n:0,p:0,t:0,last:0,it:{}};
+    cp.photo=mt.photo||''; cpPhoto();
+    oE('cpName').value=name; oE('cpPhone').value=mt.phone||''; oE('cpDisc').value=mt.disc||''; oE('cpNote').value=mt.note||'';
+    oE('cpStats').innerHTML='<div><small>الزيارات</small><b>'+c.n+'</b></div><div><small>القطع</small><b>'+c.p+'</b></div><div><small>المصروف</small><b>'+money(c.t)+'</b></div>';
+    var fav=Object.keys(c.it).sort(function(a,b){ return c.it[b]-c.it[a]; }).slice(0,3).map(function(i){ return ORD_ITEMS[i][0]+' ×'+c.it[i]; }).join('، ')||'—';
+    oE('cpFav').textContent='أكثر ما يجيب: '+fav+(c.n?' · متوسط الطلب '+money(Math.round(c.t/c.n))+' د.ع':'');
+    oE('cpOrders').innerHTML=state.orders.filter(function(o){ return o.name===name; }).sort(function(a,b){ return b.created-a.created; }).slice(0,8).map(function(o){ return '<div class="ord-meta">#'+o.no+' · '+fmtDate(isoFromDate(new Date(o.created)))+' · '+o.pieces+' قطعة · '+money(o.total)+' د.ع</div>'; }).join('');
+    oE('cpDel').style.display=isNew?'none':''; oE('custPage').classList.add('show');
   }
   oE('custSearch').addEventListener('input',renderCust);
-  oE('custList').addEventListener('click',function(e){
-    var sv=e.target.closest('[data-save]');
-    if(sv){ var n=sv.dataset.save, v=Math.max(0,Math.min(100,+oE('custDisc').value||0)); custMeta[n]=custMeta[n]||{}; custMeta[n].disc=v; custSave(); toast('تم حفظ الخصم لـ '+n); renderCust(); return; }
-    if(e.target.closest('input')) return;
-    var c=e.target.closest('[data-c]'); if(!c) return; custOpen=custOpen===c.dataset.c?null:c.dataset.c; renderCust();
+  oE('custList').addEventListener('click',function(e){ var c=e.target.closest('[data-c]'); if(c) openCust(c.dataset.c,false); });
+  oE('custAdd').addEventListener('click',function(){ openCust('',true); });
+  oE('cpClose').addEventListener('click',function(){ oE('custPage').classList.remove('show'); });
+  oE('cpPhoto').addEventListener('click',function(){ oE('cpFile').click(); });
+  oE('cpFile').addEventListener('change',function(){ var f=this.files[0]; if(!f) return; cpResize(f,function(u){ cp.photo=u; cpPhoto(); }); this.value=''; });
+  oE('cpRmPh').addEventListener('click',function(){ cp.photo=''; cpPhoto(); });
+  oE('cpWa').addEventListener('click',function(){ var n=waNum(oE('cpPhone').value); if(!n){ toast('اكتب رقم الهاتف أولاً'); return; } window.open('https://wa.me/'+n,'_blank'); });
+  oE('cpCall').addEventListener('click',function(){ var p=oE('cpPhone').value.trim(); if(!p){ toast('اكتب رقم الهاتف أولاً'); return; } location.href='tel:'+p; });
+  oE('cpSave').addEventListener('click',function(){
+    var nn=oE('cpName').value.trim(); if(!nn){ toast('اكتب اسم الزبون'); return; }
+    if(nn!==cp.name && custAgg()[nn]){ toast('يوجد زبون بنفس الاسم'); return; }
+    if(!cp.isNew && nn!==cp.name){ state.orders.forEach(function(o){ if(o.name===cp.name) o.name=nn; }); delete custMeta[cp.name]; }
+    custMeta[nn]={phone:oE('cpPhone').value.trim(),disc:Math.max(0,Math.min(100,+oE('cpDisc').value||0)),note:oE('cpNote').value.trim(),photo:cp.photo};
+    persist(); custSave(); oE('custPage').classList.remove('show'); renderCust(); toast('تم الحفظ');
+  });
+  oE('cpDel').addEventListener('click',function(){
+    var n=cp.name, k=state.orders.filter(function(o){ return o.name===n; }).length;
+    if(!window.confirm('حذف «'+n+'» مع كل طلباته ('+k+' طلب)؟ لا يمكن التراجع.')) return;
+    state.orders=state.orders.filter(function(o){ return o.name!==n; }); delete custMeta[n]; persist(); custSave(); oE('custPage').classList.remove('show'); renderCust(); toast('تم الحذف');
   });
   // ---- زر إضافة مشترك ----
   oE('btnShowSub').addEventListener('click',function(){ var c=oE('subFormCard'), sh=c.style.display==='none'; c.style.display=sh?'':'none'; this.textContent=sh?'إغلاق النموذج':'+ مشترك جديد'; if(sh){ c.scrollIntoView({behavior:'smooth',block:'start'}); setTimeout(function(){ oE('subCustomer').focus(); },300); } });
